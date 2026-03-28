@@ -1,0 +1,55 @@
+{
+  "name": "@exanderal/stackcraft",
+  "version": "0.1.0",
+  "description": "Opinionated full-stack project scaffolding CLI",
+  "type": "module",
+  "bin": {
+    "stackcraft": "./dist/index.js"
+  },
+  "exports": {
+    "./eslint": "./eslint/index.js",
+    "./tsconfig/base": "./tsconfig/base.json",
+    "./prettier": "./prettier/index.js"
+  },
+  "files": [
+    "dist",
+    "eslint",
+    "tsconfig",
+    "prettier",
+    "templates"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "lint": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.9.0",
+    "execa": "^9.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.0.0"
+  },
+  "keywords": [
+    "cli",
+    "scaffold",
+    "nestjs",
+    "vite",
+    "react",
+    "monorepo",
+    "nx"
+  ],
+  "author": "exanderal",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/exanderal/stackcraft"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

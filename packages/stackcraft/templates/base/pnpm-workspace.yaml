@@ -1,0 +1,3 @@
+packages:
+  - 'apps/*'
+  - 'packages/*' # shared code: graphql types, ui components, etc.
