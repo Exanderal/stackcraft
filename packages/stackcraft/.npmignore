@@ -1,0 +1,6 @@
+scratch/
+src/
+__tests__/
+*.test.ts
+tsconfig.json
+vitest.config.ts
