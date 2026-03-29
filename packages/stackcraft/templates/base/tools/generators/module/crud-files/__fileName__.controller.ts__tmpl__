@@ -1,0 +1,36 @@
+import {
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Query,
+} from '@nestjs/common';
+import { FindManyOptions } from 'typeorm';
+import { <%= className %>Model } from '../../modules/<%= fileName %>/<%= fileName %>.model';
+import { <%= className %>Service } from '../../modules/<%= fileName %>/<%= fileName %>.service';
+
+@Controller('<%= fileName %>s')
+export class <%= className %>Controller {
+  constructor(private readonly service: <%= className %>Service) {}
+
+  @Get()
+  findAll(@Query() query: FindManyOptions<<%= className %>Model>) {
+    return this.service.findAll(query);
+  }
+
+  @Get('by-ids')
+  findByIds(@Query('ids') ids: string) {
+    return this.service.findByIds(ids.split(','));
+  }
+
+  @Get(':id')
+  findById(@Param('id', ParseUUIDPipe) id: string) {
+    return this.service.findById(id);
+  }
+
+  @Delete(':id')
+  remove(@Param('id', ParseUUIDPipe) id: string) {
+    return this.service.remove(id);
+  }
+}

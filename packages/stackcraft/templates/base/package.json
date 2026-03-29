@@ -6,9 +6,11 @@
     "dev": "nx run-many -t dev",
     "build": "nx run-many -t build",
     "test": "nx run-many -t test",
-    "lint": "nx run-many -t lint"
+    "lint": "nx run-many -t lint",
+    "generate:module": "nx g @local/generators:module"
   },
   "devDependencies": {
+    "@nx/devkit": "^20.0.0",
     "nx": "^20.0.0"
   }
 }

@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "cli": "nx",
+  "id": "module",
+  "title": "Create a NestJS module",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Module name, singular lowercase (e.g. trainer)",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      }
+    },
+    "crud": {
+      "type": "boolean",
+      "description": "Generate a CRUD controller in src/api/<name>/",
+      "default": false,
+      "x-prompt": "Generate a CRUD controller?"
+    }
+  },
+  "required": ["name"]
+}

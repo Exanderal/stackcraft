@@ -1,0 +1,11 @@
+import { Injectable } from '@nestjs/common';
+import { EntityService } from '../../common/services/entity.service';
+import { <%= className %>Model } from './<%= fileName %>.model';
+import { <%= className %>Repository } from './<%= fileName %>.repository';
+
+@Injectable()
+export class <%= className %>Service extends EntityService<<%= className %>Model> {
+  constructor(repository: <%= className %>Repository) {
+    super(repository);
+  }
+}

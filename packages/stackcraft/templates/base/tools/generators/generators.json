@@ -1,0 +1,9 @@
+{
+  "generators": {
+    "module": {
+      "factory": "./module/index",
+      "schema": "./module/schema.json",
+      "description": "Create a NestJS module"
+    }
+  }
+}

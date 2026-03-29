@@ -1,7 +1,7 @@
 import { cancel, intro, isCancel, outro, select, spinner, text } from '@clack/prompts'
 import { resolve } from 'node:path'
 import { scaffold } from './scaffold.js'
-import type { Backend, Frontend, PackageManager, ProjectConfig } from './types.js'
+import type { Backend, Database, Frontend, PackageManager, ProjectConfig } from './types.js'
 
 export async function create() {
   intro('stackcraft — spin up a production-ready monorepo')
@@ -28,6 +28,18 @@ export async function create() {
     process.exit(0)
   }
 
+  const database = await select({
+    message: 'Database',
+    options: [
+      { value: 'postgres', label: 'PostgreSQL', hint: 'recommended' },
+      { value: 'mysql', label: 'MySQL' },
+    ],
+  })
+  if (isCancel(database)) {
+    cancel('Cancelled.')
+    process.exit(0)
+  }
+
   const packageManager = await select({
     message: 'Package manager',
     options: [
@@ -44,6 +56,7 @@ export async function create() {
     projectName: projectName as string,
     frontend: frontend as Frontend,
     backend: 'nestjs-rest' as Backend,
+    database: database as Database,
     packageManager: packageManager as PackageManager,
     targetDir: resolve(process.cwd(), projectName as string),
   }

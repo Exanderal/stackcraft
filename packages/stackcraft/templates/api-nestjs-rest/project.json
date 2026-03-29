@@ -1,5 +1,5 @@
 {
-  "name": "api",
+  "name": "backend",
   "targets": {
     "dev": {
       "executor": "nx:run-commands",

@@ -1,0 +1,31 @@
+import { Test } from '@nestjs/testing';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { <%= className %>Model } from '../<%= fileName %>.model';
+import { <%= className %>Module } from '../<%= fileName %>.module';
+import { <%= className %>Service } from '../<%= fileName %>.service';
+
+describe('<%= className %>Service', () => {
+  let service: <%= className %>Service;
+
+  beforeAll(async () => {
+    const module = await Test.createTestingModule({
+      imports: [<%= className %>Module],
+    })
+      .overrideProvider(getRepositoryToken(<%= className %>Model))
+      .useValue({
+        find: jest.fn(),
+        findOne: jest.fn(),
+        findOneBy: jest.fn(),
+        save: jest.fn(),
+        delete: jest.fn(),
+      } satisfies Partial<Repository<<%= className %>Model>>)
+      .compile();
+
+    service = module.get(<%= className %>Service);
+  });
+
+  it('is defined', () => {
+    expect(service).toBeDefined();
+  });
+});
