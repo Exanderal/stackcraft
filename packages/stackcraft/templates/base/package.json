@@ -7,7 +7,9 @@
     "build": "nx run-many -t build",
     "test": "nx run-many -t test",
     "lint": "nx run-many -t lint",
-    "generate:module": "nx g @local/generators:module"
+    "generate:module": "nx g @local/generators:module",
+    "generate:resolver": "nx g @local/generators:resolver",
+    "generate:controller": "nx g @local/generators:controller"
   },
   "devDependencies": {
     "@nx/devkit": "^20.0.0",

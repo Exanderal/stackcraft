@@ -16,6 +16,18 @@ export async function create() {
     process.exit(0)
   }
 
+  const backend = await select({
+    message: 'Backend',
+    options: [
+      { value: 'nestjs-rest', label: 'NestJS REST', hint: 'REST API with TypeORM' },
+      { value: 'nestjs-graphql', label: 'NestJS GraphQL', hint: 'Code-first GraphQL with TypeORM' },
+    ],
+  })
+  if (isCancel(backend)) {
+    cancel('Cancelled.')
+    process.exit(0)
+  }
+
   const frontend = await select({
     message: 'Frontend',
     options: [
@@ -55,7 +67,7 @@ export async function create() {
   const config: ProjectConfig = {
     projectName: projectName as string,
     frontend: frontend as Frontend,
-    backend: 'nestjs-rest' as Backend,
+    backend: backend as Backend,
     database: database as Database,
     packageManager: packageManager as PackageManager,
     targetDir: resolve(process.cwd(), projectName as string),

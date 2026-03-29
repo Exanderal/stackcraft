@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "cli": "nx",
+  "id": "controller",
+  "title": "Create a REST controller",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Module name to generate a controller for (e.g. trainer)",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      }
+    }
+  },
+  "required": ["name"]
+}

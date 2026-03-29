@@ -1,0 +1,28 @@
+import {
+  Args,
+  Mutation,
+  Query,
+  Resolver,
+} from '@nestjs/graphql';
+import { <%= className %>Model } from '../../modules/<%= fileName %>/<%= fileName %>.model';
+import { <%= className %>Service } from '../../modules/<%= fileName %>/<%= fileName %>.service';
+
+@Resolver(() => <%= className %>Model)
+export class <%= className %>Resolver {
+  constructor(private readonly service: <%= className %>Service) {}
+
+  @Query(() => [<%= className %>Model])
+  <%= propertyName %>s() {
+    return this.service.findAll();
+  }
+
+  @Query(() => <%= className %>Model, { nullable: true })
+  <%= propertyName %>(@Args('id') id: string) {
+    return this.service.findById(id);
+  }
+
+  @Mutation(() => Boolean)
+  remove<%= className %>(@Args('id') id: string) {
+    return this.service.remove(id).then(() => true);
+  }
+}

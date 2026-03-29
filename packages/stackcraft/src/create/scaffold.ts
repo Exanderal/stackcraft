@@ -1,4 +1,5 @@
 import { execa } from 'execa'
+import { scaffoldNestjsGraphql } from './scaffolders/api-nestjs-graphql.js'
 import { scaffoldNestjsRest } from './scaffolders/api-nestjs-rest.js'
 import { scaffoldBase } from './scaffolders/base.js'
 import { scaffoldNextjs } from './scaffolders/web-nextjs.js'
@@ -9,8 +10,12 @@ export async function scaffold(config: ProjectConfig, onStep: (msg: string) => v
   onStep('Creating workspace...')
   await scaffoldBase(config)
 
-  onStep('Adding API...')
-  await scaffoldNestjsRest(config)
+  onStep('Adding backend...')
+  if (config.backend === 'nestjs-graphql') {
+    await scaffoldNestjsGraphql(config)
+  } else {
+    await scaffoldNestjsRest(config)
+  }
 
   if (config.frontend === 'vite') {
     onStep('Adding Vite + React app...')

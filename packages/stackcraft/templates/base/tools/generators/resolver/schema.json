@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "cli": "nx",
+  "id": "resolver",
+  "title": "Create a GraphQL resolver",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Module name to generate a resolver for (e.g. trainer)",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      }
+    }
+  },
+  "required": ["name"]
+}

@@ -1,6 +1,6 @@
 export type PackageManager = 'pnpm' | 'npm'
 export type Frontend = 'vite' | 'nextjs'
-export type Backend = 'nestjs-rest'
+export type Backend = 'nestjs-rest' | 'nestjs-graphql'
 export type Database = 'postgres' | 'mysql'
 
 export interface ProjectConfig {

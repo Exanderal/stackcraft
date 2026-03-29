@@ -17,7 +17,7 @@ Follow the prompts — you'll have an Nx monorepo with deps installed and ready 
 ```
 your-project/
 ├── apps/
-│   ├── backend/          # NestJS REST API
+│   ├── backend/          # NestJS REST or GraphQL API
 │   └── web/              # Vite + React or Next.js
 ├── packages/             # shared code
 └── tools/
@@ -26,11 +26,20 @@ your-project/
 
 ### Backend (`apps/backend`)
 
+Choose between REST or GraphQL at setup time — both use the same underlying structure:
+
+```
+src/
+├── modules/          # domain layer — model, repository, service, module
+├── api/              # REST controllers (REST only)
+├── resolvers/        # GraphQL resolvers (GraphQL only)
+└── common/           # shared base classes
+```
+
 - NestJS with TypeORM
 - PostgreSQL or MySQL
-- Repository/Service abstraction layer (`EntityRepository`, `EntityService`)
-- Module-based structure under `src/modules/` — each module owns its model, repository, and service
-- HTTP controllers live separately in `src/api/`
+- `EntityRepository` and `EntityService` base classes — extend them for each module
+- UUID primary keys
 
 ### Frontend (`apps/web`)
 
@@ -40,8 +49,6 @@ your-project/
 
 ## Running the project
 
-Each app has the same scripts:
-
 ```sh
 pnpm dev        # start all apps in parallel
 pnpm build      # build all apps
@@ -49,7 +56,7 @@ pnpm test       # run all tests
 pnpm lint       # lint all apps
 ```
 
-Or target a specific app:
+Target a specific app:
 
 ```sh
 pnpm nx run backend:dev
@@ -58,13 +65,27 @@ pnpm nx run web:dev
 
 ## Code generation
 
-Generate a new backend module:
+Generate a new domain module:
 
 ```sh
 pnpm generate:module --name=trainer
+# add --graphql to include @ObjectType() on the model
+pnpm generate:module --name=trainer --graphql
 ```
 
-This creates `apps/backend/src/modules/trainer/` with a model, repository, service, module, and integration test. Add `--crud` to also generate a CRUD controller in `src/api/trainer/`.
+Generate a REST controller for an existing module:
+
+```sh
+pnpm generate:controller --name=trainer
+# creates apps/backend/src/api/trainer/trainer.controller.ts
+```
+
+Generate a GraphQL resolver for an existing module:
+
+```sh
+pnpm generate:resolver --name=trainer
+# creates apps/backend/src/resolvers/trainer/trainer.resolver.ts
+```
 
 ## Stack
 
@@ -75,7 +96,10 @@ This creates `apps/backend/src/modules/trainer/` with a model, repository, servi
 
 ## Roadmap
 
-- [ ] NestJS GraphQL + codegen
+- [x] NestJS REST API
+- [x] NestJS GraphQL API
+- [x] Module, controller, and resolver generators
+- [ ] GraphQL codegen pipeline
 - [ ] Expo mobile
 - [ ] `stackcraft add` addon system (auth, Supabase, etc.)
 - [ ] Presets and `--config` for non-interactive use

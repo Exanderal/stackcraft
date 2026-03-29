@@ -1,0 +1,21 @@
+{
+  "name": "backend",
+  "targets": {
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": { "command": "pnpm run dev", "cwd": "{projectRoot}" }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": { "command": "pnpm run build", "cwd": "{projectRoot}" }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": { "command": "pnpm run lint", "cwd": "{projectRoot}" }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": { "command": "pnpm run test", "cwd": "{projectRoot}" }
+    }
+  }
+}

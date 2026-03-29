@@ -3,7 +3,17 @@
     "module": {
       "factory": "./module/index",
       "schema": "./module/schema.json",
-      "description": "Create a NestJS module"
+      "description": "Create a NestJS domain module (model, repository, service)"
+    },
+    "resolver": {
+      "factory": "./resolver/index",
+      "schema": "./resolver/schema.json",
+      "description": "Create a GraphQL resolver in src/resolvers/"
+    },
+    "controller": {
+      "factory": "./controller/index",
+      "schema": "./controller/schema.json",
+      "description": "Create a REST controller in src/api/"
     }
   }
 }

@@ -1,0 +1,11 @@
+import { ObjectType } from '@nestjs/graphql';
+import { Entity } from 'typeorm';
+import { BaseEntity } from '../../common/entities/base.entity';
+
+@ObjectType()
+@Entity('<%= fileName %>s')
+export class <%= className %>Model extends BaseEntity {
+  // @Field()
+  // @Column()
+  // name: string;
+}

@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/schema",
   "cli": "nx",
   "id": "module",
-  "title": "Create a NestJS module",
+  "title": "Create a NestJS domain module",
   "type": "object",
   "properties": {
     "name": {
@@ -13,11 +13,10 @@
         "index": 0
       }
     },
-    "crud": {
+    "graphql": {
       "type": "boolean",
-      "description": "Generate a CRUD controller in src/api/<name>/",
-      "default": false,
-      "x-prompt": "Generate a CRUD controller?"
+      "description": "Add @ObjectType() to the model (required for GraphQL resolvers)",
+      "default": false
     }
   },
   "required": ["name"]
