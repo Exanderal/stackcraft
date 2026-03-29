@@ -1,0 +1,10 @@
+{
+  "name": "@local/types",
+  "version": "0.0.1",
+  "private": true,
+  "exports": {
+    "./rest": "./src/rest/index.ts",
+    "./graphql": "./src/graphql/index.ts"
+  },
+  "devDependencies": {}
+}

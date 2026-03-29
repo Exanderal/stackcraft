@@ -14,8 +14,10 @@ npx @exanderal/stackcraft
 
 An Nx monorepo with:
 
-- **NestJS backend** (REST or GraphQL) with TypeORM, UUID primary keys, and a repository/service abstraction layer
-- **Frontend** — Vite + React or Next.js, with Tailwind CSS v4
+- **NestJS backend** — REST or GraphQL, TypeORM, UUID primary keys, repository/service abstraction layer
+- **Frontend** — Vite + React or Next.js, Tailwind CSS v4
+- **Shared types** — `packages/types` auto-generated from Swagger (REST) or `schema.gql` + operation files (GraphQL), with typed Apollo hooks
+- **Apollo Client** — pre-configured and wired at the app root for GraphQL projects
 - **Local code generators** — `generate:module`, `generate:controller`, `generate:resolver`
 
 ## Repo structure
@@ -23,15 +25,20 @@ An Nx monorepo with:
 ```
 /
 ├── packages/
-│   └── stackcraft/          # the CLI package (@exanderal/stackcraft)
-│       ├── src/             # TypeScript source
-│       └── templates/       # static templates copied on scaffold
-│           ├── base/        # Nx workspace root
+│   └── stackcraft/                  # the CLI package (@exanderal/stackcraft)
+│       ├── src/
+│       │   └── create/
+│       │       ├── scaffolders/     # one file per scaffold concern
+│       │       └── scaffold.ts      # orchestrator
+│       └── templates/
+│           ├── base/                # Nx workspace root + generators + packages/types base
 │           ├── api-nestjs-rest/
 │           ├── api-nestjs-graphql/
+│           ├── types-rest/          # @hey-api/openapi-ts config
+│           ├── types-graphql/       # @graphql-codegen config
 │           ├── web-vite/
 │           └── web-nextjs/
-└── scratch/                 # local test projects (gitignored)
+└── scratch/                         # local test projects (gitignored)
 ```
 
 ## Contributing
@@ -41,9 +48,22 @@ pnpm install
 cd packages/stackcraft && pnpm build
 ```
 
-To test the CLI locally, use the scaffold function directly or run `npx @exanderal/stackcraft` after linking.
+Test locally by scaffolding a project directly:
 
-Templates are static files — run the relevant CLI tool once to generate a base, clean it up, and commit. The CLI copies them and substitutes `{{projectName}}`, `{{dbType}}`, `{{dbPort}}` at scaffold time.
+```js
+import { scaffold } from './packages/stackcraft/dist/create/scaffold.js'
+
+await scaffold({
+  projectName: 'my-app',
+  frontend: 'vite',
+  backend: 'nestjs-graphql', // or 'nestjs-rest'
+  database: 'postgres',
+  packageManager: 'pnpm',
+  targetDir: '/path/to/output',
+}, (msg) => console.log(msg))
+```
+
+Templates are static files — generate a base with the relevant CLI tool, clean it up, and commit. The scaffolder copies files and substitutes `{{projectName}}`, `{{dbType}}`, `{{dbPort}}` at scaffold time.
 
 ## License
 

@@ -1,4 +1,4 @@
-import { readFile, writeFile, mkdir } from 'node:fs/promises'
+import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import type { ProjectConfig } from '../types.js'
@@ -25,6 +25,7 @@ export async function scaffoldNestjsRest(config: ProjectConfig) {
   })
 
   await injectDbDriver(appDir, db)
+  await setupRestCodegen(config.targetDir)
 }
 
 async function injectDbDriver(appDir: string, db: typeof DB_CONFIG[keyof typeof DB_CONFIG]) {
@@ -36,6 +37,20 @@ async function injectDbDriver(appDir: string, db: typeof DB_CONFIG[keyof typeof 
   if (db.typesPackage) {
     pkg.devDependencies[db.typesPackage] = db.typesVersion
   }
+
+  await writeFile(pkgPath, JSON.stringify(pkg, null, 2) + '\n', 'utf-8')
+}
+
+async function setupRestCodegen(targetDir: string) {
+  const typesDir = join(targetDir, 'packages', 'types')
+
+  await copyTemplate(join(TEMPLATES_DIR, 'types-rest'), typesDir, {})
+
+  const pkgPath = join(typesDir, 'package.json')
+  const pkg = JSON.parse(await readFile(pkgPath, 'utf-8'))
+
+  pkg.devDependencies['@hey-api/openapi-ts'] = '^0.64.0'
+  pkg.devDependencies['chokidar-cli'] = '^3.0.0'
 
   await writeFile(pkgPath, JSON.stringify(pkg, null, 2) + '\n', 'utf-8')
 }

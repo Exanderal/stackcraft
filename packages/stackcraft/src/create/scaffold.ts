@@ -4,6 +4,7 @@ import { scaffoldNestjsRest } from './scaffolders/api-nestjs-rest.js'
 import { scaffoldBase } from './scaffolders/base.js'
 import { scaffoldNextjs } from './scaffolders/web-nextjs.js'
 import { scaffoldVite } from './scaffolders/web-vite.js'
+import { wireClientIntegration } from './scaffolders/wire-client.js'
 import type { ProjectConfig } from './types.js'
 
 export async function scaffold(config: ProjectConfig, onStep: (msg: string) => void) {
@@ -24,6 +25,9 @@ export async function scaffold(config: ProjectConfig, onStep: (msg: string) => v
     onStep('Adding Next.js app...')
     await scaffoldNextjs(config)
   }
+
+  onStep('Wiring client integration...')
+  await wireClientIntegration(config)
 
   onStep('Installing dependencies...')
   await execa(config.packageManager, ['install'], { cwd: config.targetDir })

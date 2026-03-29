@@ -1,0 +1,19 @@
+{
+  "name": "types",
+  "targets": {
+    "codegen": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "openapi-ts",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "codegen:watch": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "chokidar '../../apps/backend/swagger.json' --initial -c 'openapi-ts'",
+        "cwd": "{projectRoot}"
+      }
+    }
+  }
+}

@@ -9,7 +9,9 @@
     "lint": "nx run-many -t lint",
     "generate:module": "nx g @local/generators:module",
     "generate:resolver": "nx g @local/generators:resolver",
-    "generate:controller": "nx g @local/generators:controller"
+    "generate:controller": "nx g @local/generators:controller",
+    "codegen": "nx run types:codegen",
+    "codegen:watch": "nx run types:codegen:watch"
   },
   "devDependencies": {
     "@nx/devkit": "^20.0.0",

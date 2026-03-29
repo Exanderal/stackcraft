@@ -25,6 +25,7 @@ export async function scaffoldNestjsGraphql(config: ProjectConfig) {
   })
 
   await injectDbDriver(appDir, db)
+  await setupGraphqlCodegen(config.targetDir)
 }
 
 async function injectDbDriver(appDir: string, db: typeof DB_CONFIG[keyof typeof DB_CONFIG]) {
@@ -36,6 +37,23 @@ async function injectDbDriver(appDir: string, db: typeof DB_CONFIG[keyof typeof 
   if (db.typesPackage) {
     pkg.devDependencies[db.typesPackage] = db.typesVersion
   }
+
+  await writeFile(pkgPath, JSON.stringify(pkg, null, 2) + '\n', 'utf-8')
+}
+
+async function setupGraphqlCodegen(targetDir: string) {
+  const typesDir = join(targetDir, 'packages', 'types')
+
+  await copyTemplate(join(TEMPLATES_DIR, 'types-graphql'), typesDir, {})
+
+  const pkgPath = join(typesDir, 'package.json')
+  const pkg = JSON.parse(await readFile(pkgPath, 'utf-8'))
+
+  pkg.devDependencies['@graphql-codegen/cli'] = '^5.0.0'
+  pkg.devDependencies['@graphql-codegen/typescript'] = '^4.0.0'
+  pkg.devDependencies['@graphql-codegen/typescript-operations'] = '^4.0.0'
+  pkg.devDependencies['@graphql-codegen/typescript-react-apollo'] = '^4.0.0'
+  pkg.devDependencies['@parcel/watcher'] = '^2.0.0'
 
   await writeFile(pkgPath, JSON.stringify(pkg, null, 2) + '\n', 'utf-8')
 }

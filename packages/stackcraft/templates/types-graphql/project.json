@@ -1,0 +1,19 @@
+{
+  "name": "types",
+  "targets": {
+    "codegen": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "graphql-codegen --config codegen.ts",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "codegen:watch": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "graphql-codegen --config codegen.ts --watch",
+        "cwd": "{projectRoot}"
+      }
+    }
+  }
+}
