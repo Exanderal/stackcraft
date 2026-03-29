@@ -1,7 +1,7 @@
 import { cancel, intro, isCancel, outro, select, spinner, text } from '@clack/prompts'
 import { resolve } from 'node:path'
 import { scaffold } from './scaffold.js'
-import type { Backend, Database, Frontend, PackageManager, ProjectConfig } from './types.js'
+import type { Backend, Database, Frontend, Mobile, PackageManager, ProjectConfig } from './types.js'
 
 export async function create() {
   intro('stackcraft — spin up a production-ready monorepo')
@@ -40,6 +40,18 @@ export async function create() {
     process.exit(0)
   }
 
+  const mobile = await select({
+    message: 'Mobile',
+    options: [
+      { value: 'none', label: 'None' },
+      { value: 'expo', label: 'Expo', hint: 'React Native with Expo Router' },
+    ],
+  })
+  if (isCancel(mobile)) {
+    cancel('Cancelled.')
+    process.exit(0)
+  }
+
   const database = await select({
     message: 'Database',
     options: [
@@ -69,6 +81,7 @@ export async function create() {
     frontend: frontend as Frontend,
     backend: backend as Backend,
     database: database as Database,
+    mobile: mobile as Mobile,
     packageManager: packageManager as PackageManager,
     targetDir: resolve(process.cwd(), projectName as string),
   }

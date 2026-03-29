@@ -13,6 +13,7 @@ const CONFIG = {
   frontend: 'vite' as const,
   backend: 'nestjs-rest' as const,
   database: 'postgres' as const,
+  mobile: 'none' as const,
   packageManager: 'pnpm' as const,
   targetDir: '/tmp/my-app',
 }

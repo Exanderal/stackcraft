@@ -17,6 +17,25 @@ export async function wireClientIntegration(config: ProjectConfig) {
   } else {
     await writeFile(webPkgPath, JSON.stringify(pkg, null, 2) + '\n', 'utf-8')
   }
+
+  if (config.mobile === 'expo') {
+    await wireMobileTypes(config)
+  }
+}
+
+async function wireMobileTypes(config: ProjectConfig) {
+  const mobileDir = join(config.targetDir, 'apps', 'mobile')
+  const mobilePkgPath = join(mobileDir, 'package.json')
+  const pkg = JSON.parse(await readFile(mobilePkgPath, 'utf-8'))
+
+  pkg.dependencies['@local/types'] = 'workspace:*'
+
+  if (config.backend === 'nestjs-graphql') {
+    pkg.dependencies['@apollo/client'] = '^3.13.0'
+    pkg.dependencies['graphql'] = '^16.0.0'
+  }
+
+  await writeFile(mobilePkgPath, JSON.stringify(pkg, null, 2) + '\n', 'utf-8')
 }
 
 async function setupApolloClient(config: ProjectConfig, webDir: string) {

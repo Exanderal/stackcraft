@@ -2,6 +2,7 @@ import { execa } from 'execa'
 import { scaffoldNestjsGraphql } from './scaffolders/api-nestjs-graphql.js'
 import { scaffoldNestjsRest } from './scaffolders/api-nestjs-rest.js'
 import { scaffoldBase } from './scaffolders/base.js'
+import { scaffoldExpo } from './scaffolders/mobile-expo.js'
 import { scaffoldNextjs } from './scaffolders/web-nextjs.js'
 import { scaffoldVite } from './scaffolders/web-vite.js'
 import { wireClientIntegration } from './scaffolders/wire-client.js'
@@ -24,6 +25,11 @@ export async function scaffold(config: ProjectConfig, onStep: (msg: string) => v
   } else if (config.frontend === 'nextjs') {
     onStep('Adding Next.js app...')
     await scaffoldNextjs(config)
+  }
+
+  if (config.mobile === 'expo') {
+    onStep('Adding Expo mobile app...')
+    await scaffoldExpo(config)
   }
 
   onStep('Wiring client integration...')
