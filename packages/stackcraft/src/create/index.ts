@@ -1,7 +1,7 @@
 import { cancel, intro, isCancel, outro, select, spinner, text } from '@clack/prompts'
 import { resolve } from 'node:path'
 import { scaffold } from './scaffold.js'
-import type { Backend, Database, Frontend, Mobile, PackageManager, ProjectConfig } from './types.js'
+import type { Backend, Database, Frontend, Linter, Mobile, PackageManager, ProjectConfig } from './types.js'
 
 export async function create() {
   intro('stackcraft — spin up a production-ready monorepo')
@@ -76,12 +76,25 @@ export async function create() {
     process.exit(0)
   }
 
+  const linter = await select({
+    message: 'Linter / formatter',
+    options: [
+      { value: 'eslint', label: 'ESLint + Prettier', hint: 'recommended' },
+      { value: 'biome', label: 'Biome', hint: 'fast all-in-one, replaces both' },
+    ],
+  })
+  if (isCancel(linter)) {
+    cancel('Cancelled.')
+    process.exit(0)
+  }
+
   const config: ProjectConfig = {
     projectName: projectName as string,
     frontend: frontend as Frontend,
     backend: backend as Backend,
     database: database as Database,
     mobile: mobile as Mobile,
+    linter: linter as Linter,
     packageManager: packageManager as PackageManager,
     targetDir: resolve(process.cwd(), projectName as string),
   }

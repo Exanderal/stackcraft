@@ -3,6 +3,7 @@ export type Frontend = 'vite' | 'nextjs'
 export type Backend = 'nestjs-rest' | 'nestjs-graphql'
 export type Database = 'postgres' | 'mysql'
 export type Mobile = 'expo' | 'none'
+export type Linter = 'eslint' | 'biome'
 
 export interface ProjectConfig {
   projectName: string
@@ -10,6 +11,7 @@ export interface ProjectConfig {
   backend: Backend
   database: Database
   mobile: Mobile
+  linter: Linter
   packageManager: PackageManager
   targetDir: string
 }

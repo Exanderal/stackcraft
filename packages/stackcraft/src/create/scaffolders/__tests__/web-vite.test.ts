@@ -14,6 +14,7 @@ const CONFIG = {
   backend: 'nestjs-rest' as const,
   database: 'postgres' as const,
   mobile: 'none' as const,
+  linter: 'eslint' as const,
   packageManager: 'pnpm' as const,
   targetDir: '/tmp/my-app',
 }

@@ -19,6 +19,7 @@ An Nx monorepo with:
 - **Mobile** — Expo + Expo Router (optional), `@local/types` pre-wired
 - **Shared types** — `packages/types` auto-generated from Swagger (REST) or `schema.gql` + operation files (GraphQL), with typed Apollo hooks
 - **Apollo Client** — pre-configured and wired at the app root (and mobile) for GraphQL projects
+- **Linter / formatter** — ESLint + Prettier or Biome (your choice at setup)
 - **Local code generators** — `generate:module` (interactive), `generate:controller`, `generate:resolver`
 
 ## Repo structure
@@ -57,10 +58,12 @@ import { scaffold } from './packages/stackcraft/dist/create/scaffold.js'
 
 await scaffold({
   projectName: 'my-app',
-  frontend: 'vite',
+  frontend: 'vite',          // or 'nextjs'
   backend: 'nestjs-graphql', // or 'nestjs-rest'
-  database: 'postgres',
-  packageManager: 'pnpm',
+  database: 'postgres',      // or 'mysql'
+  mobile: 'none',            // or 'expo'
+  linter: 'eslint',          // or 'biome'
+  packageManager: 'pnpm',    // or 'npm'
   targetDir: '/path/to/output',
 }, (msg) => console.log(msg))
 ```

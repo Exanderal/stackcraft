@@ -148,6 +148,7 @@ const { data, loading } = useGetTrainersQuery()
 | Frontend | Vite + React or Next.js |
 | Mobile | Expo + Expo Router |
 | Styles | Tailwind CSS v4 |
+| Linter / formatter | ESLint + Prettier or Biome |
 | GraphQL client | Apollo Client |
 | REST types | @hey-api/openapi-ts |
 | GraphQL types + hooks | @graphql-codegen/cli |
@@ -163,6 +164,7 @@ const { data, loading } = useGetTrainersQuery()
 - [x] Typed Apollo hooks from `.graphql` operation files
 - [x] Expo mobile with Expo Router
 - [x] Interactive `generate:module` prompt
+- [x] Biome as an alternative to ESLint + Prettier
 - [ ] `stackcraft add` addon system (auth, Supabase, etc.)
 - [ ] Presets and `--config` for non-interactive use
 
