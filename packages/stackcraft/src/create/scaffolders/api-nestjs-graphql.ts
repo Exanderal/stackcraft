@@ -49,6 +49,8 @@ async function setupGraphqlCodegen(targetDir: string) {
   const pkgPath = join(typesDir, 'package.json')
   const pkg = JSON.parse(await readFile(pkgPath, 'utf-8'))
 
+  pkg.dependencies['@apollo/client'] = '^3.13.0'
+  pkg.dependencies['graphql'] = '^16.0.0'
   pkg.devDependencies['@graphql-codegen/cli'] = '^5.0.0'
   pkg.devDependencies['@graphql-codegen/typescript'] = '^4.0.0'
   pkg.devDependencies['@graphql-codegen/typescript-operations'] = '^4.0.0'

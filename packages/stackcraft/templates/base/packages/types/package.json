@@ -6,5 +6,6 @@
     "./rest": "./src/rest/index.ts",
     "./graphql": "./src/graphql/index.ts"
   },
+  "dependencies": {},
   "devDependencies": {}
 }

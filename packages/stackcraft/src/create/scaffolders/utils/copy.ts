@@ -22,7 +22,7 @@ async function substituteVars(dir: string, vars: Record<string, string>) {
       const fullPath = join(dir, entry.name)
       if (entry.isDirectory()) {
         await substituteVars(fullPath, vars)
-      } else if (isTextFile(entry.name)) {
+      } else if (entry.isFile() && isTextFile(entry.name)) {
         let content = await readFile(fullPath, 'utf-8')
         for (const [key, value] of Object.entries(vars)) {
           content = content.replaceAll(`{{${key}}}`, value)
