@@ -16,9 +16,10 @@ An Nx monorepo with:
 
 - **NestJS backend** — REST or GraphQL, TypeORM, UUID primary keys, repository/service abstraction layer
 - **Frontend** — Vite + React or Next.js, Tailwind CSS v4
+- **Mobile** — Expo + Expo Router (optional), `@local/types` pre-wired
 - **Shared types** — `packages/types` auto-generated from Swagger (REST) or `schema.gql` + operation files (GraphQL), with typed Apollo hooks
-- **Apollo Client** — pre-configured and wired at the app root for GraphQL projects
-- **Local code generators** — `generate:module`, `generate:controller`, `generate:resolver`
+- **Apollo Client** — pre-configured and wired at the app root (and mobile) for GraphQL projects
+- **Local code generators** — `generate:module` (interactive), `generate:controller`, `generate:resolver`
 
 ## Repo structure
 
@@ -37,7 +38,8 @@ An Nx monorepo with:
 │           ├── types-rest/          # @hey-api/openapi-ts config
 │           ├── types-graphql/       # @graphql-codegen config
 │           ├── web-vite/
-│           └── web-nextjs/
+│           ├── web-nextjs/
+│           └── mobile-expo/         # Expo + Expo Router
 └── scratch/                         # local test projects (gitignored)
 ```
 

@@ -18,7 +18,8 @@ Follow the prompts — you'll have an Nx monorepo with deps installed and ready 
 your-project/
 ├── apps/
 │   ├── backend/          # NestJS REST or GraphQL API
-│   └── web/              # Vite + React or Next.js
+│   ├── web/              # Vite + React or Next.js
+│   └── mobile/           # Expo (optional)
 ├── packages/
 │   └── types/            # auto-generated types shared across all apps
 └── tools/
@@ -50,6 +51,13 @@ src/
 - Tailwind CSS v4
 - TypeScript
 - GraphQL projects: Apollo Client pre-configured, `ApolloProvider` already wired at the app root
+
+### Mobile (`apps/mobile`) — optional
+
+- Expo with Expo Router (file-based navigation)
+- React Native
+- `@local/types` already wired — import shared types directly
+- GraphQL projects: Apollo Client added automatically
 
 ### Types (`packages/types`)
 
@@ -88,8 +96,9 @@ Generate a new domain module (model + repository + service):
 
 ```sh
 pnpm generate:module --name=trainer
-pnpm generate:module --name=trainer --graphql  # adds @ObjectType() to the model
 ```
+
+You'll be prompted whether to add `@ObjectType()` to the model (required for GraphQL resolvers). Pass `--graphql` to skip the prompt.
 
 Generate a REST controller:
 
@@ -137,6 +146,7 @@ const { data, loading } = useGetTrainersQuery()
 | Backend | NestJS, TypeORM |
 | Database | PostgreSQL or MySQL |
 | Frontend | Vite + React or Next.js |
+| Mobile | Expo + Expo Router |
 | Styles | Tailwind CSS v4 |
 | GraphQL client | Apollo Client |
 | REST types | @hey-api/openapi-ts |
@@ -151,7 +161,8 @@ const { data, loading } = useGetTrainersQuery()
 - [x] `codegen:watch` for live type generation during dev
 - [x] Apollo Client pre-configured in GraphQL projects
 - [x] Typed Apollo hooks from `.graphql` operation files
-- [ ] Expo mobile
+- [x] Expo mobile with Expo Router
+- [x] Interactive `generate:module` prompt
 - [ ] `stackcraft add` addon system (auth, Supabase, etc.)
 - [ ] Presets and `--config` for non-interactive use
 
