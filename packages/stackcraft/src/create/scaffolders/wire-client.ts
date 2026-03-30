@@ -97,20 +97,20 @@ async function patchNextLayout(webDir: string) {
 }
 
 function apolloViteClient() {
-  return `import { ApolloClient, InMemoryCache } from '@apollo/client'
+  return `import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client'
 
 export const client = new ApolloClient({
-  uri: import.meta.env.VITE_API_URL ?? 'http://localhost:3000/graphql',
+  link: new HttpLink({ uri: import.meta.env.VITE_API_URL ?? 'http://localhost:3001/graphql' }),
   cache: new InMemoryCache(),
 })
 `
 }
 
 function apolloNextClient() {
-  return `import { ApolloClient, InMemoryCache } from '@apollo/client'
+  return `import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client'
 
 export const client = new ApolloClient({
-  uri: process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000/graphql',
+  link: new HttpLink({ uri: process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001/graphql' }),
   cache: new InMemoryCache(),
 })
 `

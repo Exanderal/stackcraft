@@ -91,7 +91,7 @@ async function writeBackendEnv(config: ProjectConfig) {
     `DB_NAME=${dbName}`,
     '',
     '# App',
-    'PORT=3000',
+    'PORT=3001',
     'NODE_ENV=development',
     '',
   ].join('\n')
@@ -106,7 +106,7 @@ async function writeFrontendEnv(config: ProjectConfig) {
 
   const lines = [
     '# API',
-    `${apiVar}=http://localhost:3000`,
+    `${apiVar}=http://localhost:3001`,
     '',
   ].join('\n')
 
