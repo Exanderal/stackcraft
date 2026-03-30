@@ -127,7 +127,13 @@ async function addDbScripts(config: ProjectConfig) {
 
 async function updateGitignore(config: ProjectConfig) {
   const gitignorePath = join(config.targetDir, '.gitignore')
-  const content = await readFile(gitignorePath, 'utf-8')
+
+  let content = ''
+  try {
+    content = await readFile(gitignorePath, 'utf-8')
+  } catch {
+    // file may not exist yet — we'll create it
+  }
 
   if (!content.includes('.env')) {
     await writeFile(gitignorePath, content + '\n# environment\n**/.env\n', 'utf-8')

@@ -1,4 +1,4 @@
-import { cp, readFile, readdir, writeFile } from 'node:fs/promises'
+import { cp, readFile, readdir, rename, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 
 const TEXT_EXTENSIONS = new Set([
@@ -39,5 +39,20 @@ export async function copyTemplate(
   vars: Record<string, string>,
 ) {
   await cp(src, dest, { recursive: true })
+  await renameGitignores(dest)
   await substituteVars(dest, vars)
+}
+
+async function renameGitignores(dir: string) {
+  const entries = await readdir(dir, { withFileTypes: true })
+  await Promise.all(
+    entries.map(async (entry) => {
+      const fullPath = join(dir, entry.name)
+      if (entry.isDirectory()) {
+        await renameGitignores(fullPath)
+      } else if (entry.isFile() && entry.name === 'gitignore') {
+        await rename(fullPath, join(dir, '.gitignore'))
+      }
+    }),
+  )
 }
