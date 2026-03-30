@@ -3,6 +3,7 @@ import { scaffoldNestjsGraphql } from './scaffolders/api-nestjs-graphql.js'
 import { scaffoldNestjsRest } from './scaffolders/api-nestjs-rest.js'
 import { scaffoldBase } from './scaffolders/base.js'
 import { scaffoldExpo } from './scaffolders/mobile-expo.js'
+import { setupDocker } from './scaffolders/setup-docker.js'
 import { setupLinter } from './scaffolders/setup-linter.js'
 import { scaffoldNextjs } from './scaffolders/web-nextjs.js'
 import { scaffoldVite } from './scaffolders/web-vite.js'
@@ -35,6 +36,9 @@ export async function scaffold(config: ProjectConfig, onStep: (msg: string) => v
 
   onStep('Configuring linter...')
   await setupLinter(config)
+
+  onStep('Setting up Docker and environment...')
+  await setupDocker(config)
 
   onStep('Wiring client integration...')
   await wireClientIntegration(config)

@@ -22,8 +22,9 @@ your-project/
 │   └── mobile/           # Expo (optional)
 ├── packages/
 │   └── types/            # auto-generated types shared across all apps
-└── tools/
-    └── generators/       # local Nx code generators
+├── tools/
+│   └── generators/       # local Nx code generators
+└── docker-compose.yml    # local database
 ```
 
 ### Backend (`apps/backend`)
@@ -44,6 +45,7 @@ src/
 - UUID primary keys
 - REST: Swagger UI at `/api`, spec written to `swagger.json` on startup
 - GraphQL: schema auto-generated to `schema.gql` on startup (code-first)
+- `.env` pre-configured with local database credentials
 
 ### Frontend (`apps/web`)
 
@@ -51,6 +53,7 @@ src/
 - Tailwind CSS v4
 - TypeScript
 - GraphQL projects: Apollo Client pre-configured, `ApolloProvider` already wired at the app root
+- `.env` pre-configured with `VITE_API_URL` / `NEXT_PUBLIC_API_URL`
 
 ### Mobile (`apps/mobile`) — optional
 
@@ -66,16 +69,26 @@ Auto-generated TypeScript types shared across all apps — import from `@local/t
 - REST → generated from `swagger.json` via `@hey-api/openapi-ts`
 - GraphQL → generated from `schema.gql` + your `.graphql` operation files via `@graphql-codegen/cli`, outputs typed Apollo hooks
 
-## Running the project
+## Quick start
+
+```sh
+pnpm db:start   # start the local database (Docker)
+pnpm install
+pnpm dev
+```
+
+Environment variables are pre-configured in each app's `.env` — no manual setup needed to get started locally.
+
+## Scripts
 
 ```sh
 pnpm dev            # start all apps in parallel
 pnpm build          # build all apps
 pnpm test           # run all tests
 pnpm lint           # lint all apps
-```
-
-```sh
+pnpm db:start       # start the local database
+pnpm db:stop        # stop the local database
+pnpm db:logs        # tail database logs
 pnpm codegen        # generate types once
 pnpm codegen:watch  # watch for schema/spec changes and regenerate automatically
 ```
@@ -152,6 +165,7 @@ const { data, loading } = useGetTrainersQuery()
 | GraphQL client | Apollo Client |
 | REST types | @hey-api/openapi-ts |
 | GraphQL types + hooks | @graphql-codegen/cli |
+| Local database | Docker Compose |
 
 ## Roadmap
 
@@ -165,6 +179,7 @@ const { data, loading } = useGetTrainersQuery()
 - [x] Expo mobile with Expo Router
 - [x] Interactive `generate:module` prompt
 - [x] Biome as an alternative to ESLint + Prettier
+- [x] Docker Compose for local database + per-app `.env` files
 - [ ] `stackcraft add` addon system (auth, Supabase, etc.)
 - [ ] Presets and `--config` for non-interactive use
 

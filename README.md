@@ -20,7 +20,10 @@ An Nx monorepo with:
 - **Shared types** — `packages/types` auto-generated from Swagger (REST) or `schema.gql` + operation files (GraphQL), with typed Apollo hooks
 - **Apollo Client** — pre-configured and wired at the app root (and mobile) for GraphQL projects
 - **Linter / formatter** — ESLint + Prettier or Biome (your choice at setup)
+- **Docker Compose** — local database with a single command (`pnpm db:start`)
+- **Per-app `.env` files** — pre-filled with local defaults, gitignored, with committed `.env.example`
 - **Local code generators** — `generate:module` (interactive), `generate:controller`, `generate:resolver`
+- **Generated `README.md`** — quick start, scripts reference, and Railway deploy instructions
 
 ## Repo structure
 
