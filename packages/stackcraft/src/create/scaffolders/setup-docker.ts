@@ -82,13 +82,30 @@ async function writeBackendEnv(config: ProjectConfig) {
   const dbName = config.projectName.replace(/-/g, '_')
   const backendDir = join(config.targetDir, 'apps', 'backend')
 
+  let dbLines: string[]
+
+  if (config.orm === 'prisma') {
+    const protocol = config.database === 'postgres' ? 'postgresql' : 'mysql'
+    const user = db.envVars.DB_USER
+    const password = db.envVars.DB_PASSWORD
+    const port = db.envVars.DB_PORT
+    dbLines = [
+      '# Database',
+      `DATABASE_URL=${protocol}://${user}:${password}@localhost:${port}/${dbName}`,
+    ]
+  } else {
+    dbLines = [
+      '# Database',
+      `DB_HOST=localhost`,
+      `DB_PORT=${db.envVars.DB_PORT}`,
+      `DB_USER=${db.envVars.DB_USER}`,
+      `DB_PASSWORD=${db.envVars.DB_PASSWORD}`,
+      `DB_NAME=${dbName}`,
+    ]
+  }
+
   const lines = [
-    '# Database',
-    `DB_HOST=localhost`,
-    `DB_PORT=${db.envVars.DB_PORT}`,
-    `DB_USER=${db.envVars.DB_USER}`,
-    `DB_PASSWORD=${db.envVars.DB_PASSWORD}`,
-    `DB_NAME=${dbName}`,
+    ...dbLines,
     '',
     '# App',
     'PORT=3001',
@@ -121,6 +138,17 @@ async function addDbScripts(config: ProjectConfig) {
   pkg.scripts['db:start'] = 'docker compose up -d'
   pkg.scripts['db:stop'] = 'docker compose down'
   pkg.scripts['db:logs'] = 'docker compose logs -f db'
+
+  if (config.orm === 'prisma') {
+    pkg.scripts['db:migrate'] = 'nx run backend:migration:run'
+    pkg.scripts['db:migrate:deploy'] = 'nx run backend:migration:deploy'
+    pkg.scripts['db:seed'] = 'nx run backend:db:seed'
+    pkg.scripts['db:studio'] = 'nx run backend:db:studio'
+  } else {
+    pkg.scripts['db:migrate'] = 'nx run backend:migration:run'
+    pkg.scripts['db:rollback'] = 'nx run backend:migration:revert'
+    pkg.scripts['db:seed'] = 'nx run backend:db:seed'
+  }
 
   await writeFile(pkgPath, JSON.stringify(pkg, null, 2) + '\n', 'utf-8')
 }

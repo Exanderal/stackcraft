@@ -12,12 +12,6 @@
         "$source": "argv",
         "index": 0
       }
-    },
-    "graphql": {
-      "type": "boolean",
-      "description": "Add @ObjectType() to the model (required for GraphQL resolvers)",
-      "default": false,
-      "x-prompt": "Add @ObjectType() to the model? (required for GraphQL resolvers)"
     }
   },
   "required": ["name"]

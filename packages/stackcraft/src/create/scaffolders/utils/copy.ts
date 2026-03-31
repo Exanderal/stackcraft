@@ -5,6 +5,7 @@ const TEXT_EXTENSIONS = new Set([
   '.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs',
   '.json', '.css', '.html', '.md',
   '.yaml', '.yml', '.env',
+  '.prisma',
   '.gitignore', '.prettierrc', '.eslintrc', '.mjs',
 ])
 

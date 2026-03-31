@@ -24,6 +24,9 @@ const CHECKS = [
   'apps/web/.env.example',
   'packages/types/package.json',
   'tools/generators/generators.json',
+  // Prisma ORM (default)
+  'apps/backend/prisma/schema.prisma',
+  'apps/backend/src/modules/prisma/prisma.service.ts',
 ]
 
 async function run() {
@@ -38,6 +41,7 @@ async function run() {
         database: 'postgres',
         mobile: 'none',
         linter: 'eslint',
+        orm: 'prisma',
         packageManager: 'pnpm',
         targetDir,
       },

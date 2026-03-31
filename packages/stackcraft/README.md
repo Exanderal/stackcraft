@@ -12,6 +12,12 @@ npx @exanderal/stackcraft
 
 Follow the prompts — you'll have an Nx monorepo with deps installed and ready to run.
 
+Add `--full` to unlock ORM and linter selection:
+
+```sh
+npx @exanderal/stackcraft --full
+```
+
 ## What you get
 
 ```
@@ -35,17 +41,31 @@ Choose between REST or GraphQL at setup — both share the same structure:
 src/
 ├── modules/      # domain layer — model, repository, service, module
 ├── api/          # REST controllers
-├── resolvers/    # GraphQL resolvers
-└── common/       # shared base classes (EntityRepository, EntityService)
+└── resolvers/    # GraphQL resolvers
 ```
 
-- NestJS with TypeORM
+- NestJS
 - PostgreSQL or MySQL
-- `EntityRepository` and `EntityService` base classes — extend them for each module
-- UUID primary keys
+- **Prisma** (default) or **Kysely** (power user, use `--full` to select)
 - REST: Swagger UI at `/api`, spec written to `swagger.json` on startup
 - GraphQL: schema auto-generated to `schema.gql` on startup (code-first)
 - `.env` pre-configured with local database credentials
+
+#### Prisma (default)
+
+- `prisma/schema.prisma` with your chosen database provider
+- `PrismaService` as a global NestJS provider
+- Generator templates: `generate:module` outputs a Prisma-based repository
+- Single `DATABASE_URL` connection string in `.env`
+
+#### Kysely (`--full` only)
+
+- `src/database/` — `database.types.ts`, `migrations/`, `seeds/`, `utils/`
+- `ReadonlyEntityRepository` and `EntityRepository` base classes
+- `KyselyService` as a global NestJS provider
+- `scripts/migrate.ts` — run/revert migrations; `scripts/migration-create.ts` — generate timestamped migration files
+- Generator templates: `generate:module` outputs a Kysely-based repository
+- Individual `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME` vars in `.env`
 
 ### Frontend (`apps/web`)
 
@@ -93,6 +113,32 @@ pnpm codegen        # generate types once
 pnpm codegen:watch  # watch for schema/spec changes and regenerate automatically
 ```
 
+### Database scripts
+
+**Prisma:**
+
+```sh
+pnpm db:migrate         # run pending migrations (prisma migrate dev)
+pnpm db:migrate:deploy  # deploy migrations in CI/production
+pnpm db:seed            # run the seeder
+pnpm db:studio          # open Prisma Studio
+```
+
+**Kysely:**
+
+```sh
+pnpm db:migrate   # run pending migrations
+pnpm db:rollback  # revert the last migration
+pnpm db:seed      # run the seeder
+```
+
+Creating a new migration file is a backend-level command:
+
+```sh
+pnpm --filter backend migration:new <name>
+# → creates apps/backend/src/database/migrations/<timestamp>-<name>.ts
+```
+
 Typical dev workflow — run both in parallel:
 
 ```sh
@@ -111,7 +157,7 @@ Generate a new domain module (model + repository + service):
 pnpm generate:module --name=trainer
 ```
 
-You'll be prompted whether to add `@ObjectType()` to the model (required for GraphQL resolvers). Pass `--graphql` to skip the prompt.
+The generated repository and service match your chosen ORM — Prisma or Kysely.
 
 Generate a REST controller:
 
@@ -156,12 +202,13 @@ const { data, loading } = useGetTrainersQuery()
 |---|---|
 | Monorepo | Nx |
 | Package manager | pnpm or npm |
-| Backend | NestJS, TypeORM |
+| Backend | NestJS |
+| ORM | Prisma (default) or Kysely (`--full`) |
 | Database | PostgreSQL or MySQL |
 | Frontend | Vite + React or Next.js |
 | Mobile | Expo + Expo Router |
 | Styles | Tailwind CSS v4 |
-| Linter / formatter | ESLint + Prettier or Biome |
+| Linter / formatter | ESLint + Prettier or Biome (`--full`) |
 | GraphQL client | Apollo Client |
 | REST types | @hey-api/openapi-ts |
 | GraphQL types + hooks | @graphql-codegen/cli |
@@ -180,6 +227,8 @@ const { data, loading } = useGetTrainersQuery()
 - [x] Interactive `generate:module` prompt
 - [x] Biome as an alternative to ESLint + Prettier
 - [x] Docker Compose for local database + per-app `.env` files
+- [x] Prisma ORM (default)
+- [x] Kysely ORM with repository abstraction (`--full`)
 - [ ] `stackcraft add` addon system (auth, Supabase, etc.)
 - [ ] Presets and `--config` for non-interactive use
 

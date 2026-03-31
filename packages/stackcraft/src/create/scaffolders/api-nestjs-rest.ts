@@ -2,43 +2,43 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import type { ProjectConfig } from '../types.js'
+import { injectOrmDeps, writeKyselyService, writeMigrateScript, writeModuleGeneratorIndex } from './orm.js'
 import { copyTemplate } from './utils/copy.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const TEMPLATES_DIR = join(__dirname, '..', '..', '..', 'templates')
 
-const DB_CONFIG = {
-  postgres: { type: 'postgres', port: '5432', driver: 'pg', driverVersion: '^8.0.0', typesPackage: '@types/pg', typesVersion: '^8.0.0' },
-  mysql:    { type: 'mysql',    port: '3306', driver: 'mysql2', driverVersion: '^3.0.0', typesPackage: null, typesVersion: null },
-} as const
-
 export async function scaffoldNestjsRest(config: ProjectConfig) {
   const appDir = join(config.targetDir, 'apps', 'backend')
   await mkdir(appDir, { recursive: true })
 
-  const db = DB_CONFIG[config.database]
+  const dbProvider = config.database === 'postgres' ? 'postgresql' : 'mysql'
 
   await copyTemplate(join(TEMPLATES_DIR, 'api-nestjs-rest'), appDir, {
     projectName: config.projectName,
-    dbType: db.type,
-    dbPort: db.port,
   })
 
-  await injectDbDriver(appDir, db)
-  await setupRestCodegen(config.targetDir)
-}
+  await copyTemplate(join(TEMPLATES_DIR, `orm-${config.orm}`), appDir, {
+    projectName: config.projectName,
+    dbProvider,
+  })
 
-async function injectDbDriver(appDir: string, db: typeof DB_CONFIG[keyof typeof DB_CONFIG]) {
-  const pkgPath = join(appDir, 'package.json')
-  const pkg = JSON.parse(await readFile(pkgPath, 'utf-8'))
+  // Push ORM generator templates to workspace root, overwriting base TypeORM generators
+  await copyTemplate(
+    join(TEMPLATES_DIR, `orm-${config.orm}`, 'tools'),
+    join(config.targetDir, 'tools'),
+    { projectName: config.projectName, dbProvider },
+  )
 
-  pkg.dependencies[db.driver] = db.driverVersion
+  await injectOrmDeps(appDir, config)
 
-  if (db.typesPackage) {
-    pkg.devDependencies[db.typesPackage] = db.typesVersion
+  if (config.orm === 'kysely') {
+    await writeKyselyService(appDir, config)
+    await writeMigrateScript(appDir, config)
   }
 
-  await writeFile(pkgPath, JSON.stringify(pkg, null, 2) + '\n', 'utf-8')
+  await writeModuleGeneratorIndex(config.targetDir, config.backend)
+  await setupRestCodegen(config.targetDir)
 }
 
 async function setupRestCodegen(targetDir: string) {

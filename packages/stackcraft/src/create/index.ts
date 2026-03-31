@@ -1,9 +1,9 @@
 import { cancel, intro, isCancel, outro, select, spinner, text } from '@clack/prompts'
 import { resolve } from 'node:path'
 import { scaffold } from './scaffold.js'
-import type { Backend, Database, Frontend, Linter, Mobile, PackageManager, ProjectConfig } from './types.js'
+import type { Backend, Database, Frontend, Linter, Mobile, ORM, PackageManager, ProjectConfig } from './types.js'
 
-export async function create() {
+export async function create(fullMode = false) {
   intro('stackcraft — spin up a production-ready monorepo')
 
   const projectName = await text({
@@ -19,13 +19,29 @@ export async function create() {
   const backend = await select({
     message: 'Backend',
     options: [
-      { value: 'nestjs-rest', label: 'NestJS REST', hint: 'REST API with TypeORM' },
-      { value: 'nestjs-graphql', label: 'NestJS GraphQL', hint: 'Code-first GraphQL with TypeORM' },
+      { value: 'nestjs-rest', label: 'NestJS REST', hint: 'REST API' },
+      { value: 'nestjs-graphql', label: 'NestJS GraphQL', hint: 'Code-first GraphQL' },
     ],
   })
   if (isCancel(backend)) {
     cancel('Cancelled.')
     process.exit(0)
+  }
+
+  let orm: ORM = 'prisma'
+  if (fullMode) {
+    const ormAnswer = await select({
+      message: 'ORM',
+      options: [
+        { value: 'prisma', label: 'Prisma', hint: 'recommended — schema-first, great DX' },
+        { value: 'kysely', label: 'Kysely', hint: 'type-safe SQL query builder' },
+      ],
+    })
+    if (isCancel(ormAnswer)) {
+      cancel('Cancelled.')
+      process.exit(0)
+    }
+    orm = ormAnswer as ORM
   }
 
   const frontend = await select({
@@ -76,16 +92,20 @@ export async function create() {
     process.exit(0)
   }
 
-  const linter = await select({
-    message: 'Linter / formatter',
-    options: [
-      { value: 'eslint', label: 'ESLint + Prettier', hint: 'recommended' },
-      { value: 'biome', label: 'Biome', hint: 'fast all-in-one, replaces both' },
-    ],
-  })
-  if (isCancel(linter)) {
-    cancel('Cancelled.')
-    process.exit(0)
+  let linter: Linter = 'eslint'
+  if (fullMode) {
+    const linterAnswer = await select({
+      message: 'Linter / formatter',
+      options: [
+        { value: 'eslint', label: 'ESLint + Prettier', hint: 'recommended' },
+        { value: 'biome', label: 'Biome', hint: 'fast all-in-one, replaces both' },
+      ],
+    })
+    if (isCancel(linterAnswer)) {
+      cancel('Cancelled.')
+      process.exit(0)
+    }
+    linter = linterAnswer as Linter
   }
 
   const config: ProjectConfig = {
@@ -94,7 +114,8 @@ export async function create() {
     backend: backend as Backend,
     database: database as Database,
     mobile: mobile as Mobile,
-    linter: linter as Linter,
+    linter,
+    orm,
     packageManager: packageManager as PackageManager,
     targetDir: resolve(process.cwd(), projectName as string),
   }

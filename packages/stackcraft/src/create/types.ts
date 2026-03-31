@@ -4,6 +4,7 @@ export type Backend = 'nestjs-rest' | 'nestjs-graphql'
 export type Database = 'postgres' | 'mysql'
 export type Mobile = 'expo' | 'none'
 export type Linter = 'eslint' | 'biome'
+export type ORM = 'prisma' | 'kysely'
 
 export interface ProjectConfig {
   projectName: string
@@ -12,6 +13,7 @@ export interface ProjectConfig {
   database: Database
   mobile: Mobile
   linter: Linter
+  orm: ORM
   packageManager: PackageManager
   targetDir: string
 }

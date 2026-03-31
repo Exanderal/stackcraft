@@ -8,10 +8,6 @@ module.exports = async function (tree, options) {
 
   generateFiles(tree, join(__dirname, 'files'), modulePath, { ...n, tmpl: '' });
 
-  if (options.graphql) {
-    generateFiles(tree, join(__dirname, 'graphql-files'), modulePath, { ...n, tmpl: '' });
-  }
-
   await formatFiles(tree);
 
   console.log(`\n✓ Module created at ${modulePath}/`);

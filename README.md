@@ -10,16 +10,22 @@ Opinionated full-stack monorepo scaffolding CLI. Spin up a NestJS + React projec
 npx @exanderal/stackcraft
 ```
 
+Add `--full` to unlock ORM and linter selection:
+
+```sh
+npx @exanderal/stackcraft --full
+```
+
 ## What it generates
 
 An Nx monorepo with:
 
-- **NestJS backend** — REST or GraphQL, TypeORM, UUID primary keys, repository/service abstraction layer
+- **NestJS backend** — REST or GraphQL; Prisma (default) or Kysely (`--full`); repository/service abstraction layer
 - **Frontend** — Vite + React or Next.js, Tailwind CSS v4
 - **Mobile** — Expo + Expo Router (optional), `@local/types` pre-wired
 - **Shared types** — `packages/types` auto-generated from Swagger (REST) or `schema.gql` + operation files (GraphQL), with typed Apollo hooks
 - **Apollo Client** — pre-configured and wired at the app root (and mobile) for GraphQL projects
-- **Linter / formatter** — ESLint + Prettier or Biome (your choice at setup)
+- **Linter / formatter** — ESLint + Prettier (default) or Biome (`--full`)
 - **Docker Compose** — local database with a single command (`pnpm db:start`)
 - **Per-app `.env` files** — pre-filled with local defaults, gitignored, with committed `.env.example`
 - **Local code generators** — `generate:module` (interactive), `generate:controller`, `generate:resolver`
@@ -37,8 +43,10 @@ An Nx monorepo with:
 │       │       └── scaffold.ts      # orchestrator
 │       └── templates/
 │           ├── base/                # Nx workspace root + generators + packages/types base
-│           ├── api-nestjs-rest/
-│           ├── api-nestjs-graphql/
+│           ├── api-nestjs-rest/     # NestJS REST base (no ORM)
+│           ├── api-nestjs-graphql/  # NestJS GraphQL base (no ORM)
+│           ├── orm-prisma/          # Prisma overlay (applied on top of either base)
+│           ├── orm-kysely/          # Kysely overlay (applied on top of either base)
 │           ├── types-rest/          # @hey-api/openapi-ts config
 │           ├── types-graphql/       # @graphql-codegen config
 │           ├── web-vite/
@@ -46,6 +54,8 @@ An Nx monorepo with:
 │           └── mobile-expo/         # Expo + Expo Router
 └── scratch/                         # local test projects (gitignored)
 ```
+
+The ORM overlays are independent of REST vs GraphQL — they are copied on top of whichever NestJS base was selected. This avoids duplicating templates per ORM.
 
 ## Contributing
 
@@ -66,12 +76,21 @@ await scaffold({
   database: 'postgres',      // or 'mysql'
   mobile: 'none',            // or 'expo'
   linter: 'eslint',          // or 'biome'
+  orm: 'prisma',             // or 'kysely'
   packageManager: 'pnpm',    // or 'npm'
   targetDir: '/path/to/output',
 }, (msg) => console.log(msg))
 ```
 
-Templates are static files — generate a base with the relevant CLI tool, clean it up, and commit. The scaffolder copies files and substitutes `{{projectName}}`, `{{dbType}}`, `{{dbPort}}` at scaffold time.
+Run the e2e test (requires a built dist):
+
+```sh
+cd packages/stackcraft
+pnpm build
+node scripts/e2e.mjs
+```
+
+Templates are static files — generate a base with the relevant CLI tool, clean it up, and commit. The scaffolder copies files and substitutes `{{projectName}}` and `{{dbProvider}}` at scaffold time. The `.prisma` extension is treated as a text file so template vars are substituted correctly.
 
 ## License
 

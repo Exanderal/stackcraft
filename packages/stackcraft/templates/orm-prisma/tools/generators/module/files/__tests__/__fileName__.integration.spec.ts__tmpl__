@@ -1,0 +1,23 @@
+import { Test } from '@nestjs/testing';
+import { PrismaService } from '../../modules/prisma/prisma.service';
+import { <%= className %>Module } from '../<%= fileName %>.module';
+import { <%= className %>Service } from '../<%= fileName %>.service';
+
+describe('<%= className %>Service', () => {
+  let service: <%= className %>Service;
+
+  beforeAll(async () => {
+    const module = await Test.createTestingModule({
+      imports: [<%= className %>Module],
+    })
+      .overrideProvider(PrismaService)
+      .useValue({})
+      .compile();
+
+    service = module.get(<%= className %>Service);
+  });
+
+  it('is defined', () => {
+    expect(service).toBeDefined();
+  });
+});

@@ -15,6 +15,7 @@ const CONFIG = {
   database: 'postgres' as const,
   mobile: 'none' as const,
   linter: 'eslint' as const,
+  orm: 'prisma' as const,
   packageManager: 'pnpm' as const,
   targetDir: '/tmp/my-app',
 }

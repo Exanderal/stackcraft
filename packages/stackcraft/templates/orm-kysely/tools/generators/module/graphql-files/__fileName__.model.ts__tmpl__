@@ -1,0 +1,24 @@
+import { Field, ID, ObjectType } from '@nestjs/graphql';
+
+// Define this table in src/database/database.types.ts:
+//
+// export interface <%= className %>sTable {
+//   id: Generated<string>
+//   created_at: Generated<Date>
+//   updated_at: Generated<Date>
+// }
+//
+// Then add to Database interface:
+//   <%= fileName %>s: <%= className %>sTable
+
+@ObjectType()
+export class <%= className %> {
+  @Field(() => ID)
+  id: string;
+
+  @Field(() => String)
+  createdAt: Date;
+
+  @Field(() => String)
+  updatedAt: Date;
+}

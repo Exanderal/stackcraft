@@ -1,0 +1,28 @@
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../../modules/prisma/prisma.service';
+import type { <%= className %> } from './<%= fileName %>.model';
+
+@Injectable()
+export class <%= className %>Repository {
+  constructor(private readonly prisma: PrismaService) {}
+
+  findAll() {
+    return this.prisma.<%= fileName %>.findMany();
+  }
+
+  findById(id: string) {
+    return this.prisma.<%= fileName %>.findUnique({ where: { id } });
+  }
+
+  create(data: Omit<<%= className %>, 'id' | 'createdAt' | 'updatedAt'>) {
+    return this.prisma.<%= fileName %>.create({ data });
+  }
+
+  update(id: string, data: Partial<Omit<<%= className %>, 'id' | 'createdAt' | 'updatedAt'>>) {
+    return this.prisma.<%= fileName %>.update({ where: { id }, data });
+  }
+
+  remove(id: string) {
+    return this.prisma.<%= fileName %>.delete({ where: { id } });
+  }
+}

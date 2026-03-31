@@ -1,0 +1,28 @@
+import { Injectable } from '@nestjs/common';
+import type { <%= className %> } from './<%= fileName %>.model';
+import { <%= className %>Repository } from './<%= fileName %>.repository';
+
+@Injectable()
+export class <%= className %>Service {
+  constructor(private readonly repository: <%= className %>Repository) {}
+
+  findAll() {
+    return this.repository.findAll();
+  }
+
+  findById(id: string) {
+    return this.repository.findById(id);
+  }
+
+  create(data: Omit<<%= className %>, 'id' | 'createdAt' | 'updatedAt'>) {
+    return this.repository.create(data);
+  }
+
+  update(id: string, data: Partial<Omit<<%= className %>, 'id' | 'createdAt' | 'updatedAt'>>) {
+    return this.repository.update(id, data);
+  }
+
+  remove(id: string) {
+    return this.repository.remove(id);
+  }
+}

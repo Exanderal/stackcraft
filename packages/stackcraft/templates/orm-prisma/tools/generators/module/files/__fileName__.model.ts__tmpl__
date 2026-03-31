@@ -1,0 +1,15 @@
+// Add this model to prisma/schema.prisma:
+//
+// model <%= className %> {
+//   id        String   @id @default(cuid())
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }
+//
+// Then run: pnpm migration:run
+
+export type <%= className %> = {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
