@@ -1,4 +1,4 @@
-import { execa } from 'execa'
+import { x } from 'tinyexec'
 import { scaffoldNestjsGraphql } from './scaffolders/api-nestjs-graphql.js'
 import { scaffoldNestjsRest } from './scaffolders/api-nestjs-rest.js'
 import { scaffoldBase } from './scaffolders/base.js'
@@ -44,5 +44,5 @@ export async function scaffold(config: ProjectConfig, onStep: (msg: string) => v
   await wireClientIntegration(config)
 
   onStep('Installing dependencies...')
-  await execa(config.packageManager, ['install'], { cwd: config.targetDir })
+  await x(config.packageManager, ['install'], { nodeOptions: { cwd: config.targetDir }, throwOnError: true })
 }
