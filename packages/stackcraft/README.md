@@ -18,6 +18,38 @@ Add `--full` to unlock ORM and linter selection:
 npx @exanderal/stackcraft --full
 ```
 
+### Non-interactive mode
+
+Generate a config file with all defaults:
+
+```sh
+npx @exanderal/stackcraft init
+```
+
+This writes `stackcraft.config.json` to the current directory:
+
+```json
+{
+  "$schema": "https://unpkg.com/@exanderal/stackcraft/schema.json",
+  "name": "my-app",
+  "backend": "nestjs-rest",
+  "orm": "prisma",
+  "frontend": "vite",
+  "mobile": "none",
+  "database": "postgres",
+  "packageManager": "pnpm",
+  "linter": "eslint"
+}
+```
+
+Edit the fields you want, then scaffold:
+
+```sh
+npx @exanderal/stackcraft --config stackcraft.config.json
+```
+
+Any field omitted from the config will be prompted interactively. The `$schema` enables autocomplete and validation in VS Code — hover over any field to see valid values.
+
 ## What you get
 
 ```
@@ -229,8 +261,8 @@ const { data, loading } = useGetTrainersQuery()
 - [x] Docker Compose for local database + per-app `.env` files
 - [x] Prisma ORM (default)
 - [x] Kysely ORM with repository abstraction (`--full`)
+- [x] `stackcraft init` + `--config` for non-interactive use
 - [ ] `stackcraft add` addon system (auth, Supabase, etc.)
-- [ ] Presets and `--config` for non-interactive use
 
 ## License
 

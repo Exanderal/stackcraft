@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://unpkg.com/@exanderal/stackcraft/schema.json",
+  "title": "Stackcraft config",
+  "description": "Configuration file for npx stackcraft --config",
+  "type": "object",
+  "required": ["name"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string",
+      "description": "Project name (used as the root directory name)"
+    },
+    "backend": {
+      "type": "string",
+      "enum": ["nestjs-rest", "nestjs-graphql"],
+      "default": "nestjs-rest",
+      "description": "Backend framework and API style"
+    },
+    "orm": {
+      "type": "string",
+      "enum": ["prisma", "kysely"],
+      "default": "prisma",
+      "description": "Database ORM / query builder"
+    },
+    "frontend": {
+      "type": "string",
+      "enum": ["vite", "nextjs"],
+      "default": "vite",
+      "description": "Frontend framework"
+    },
+    "mobile": {
+      "type": "string",
+      "enum": ["none", "expo"],
+      "default": "none",
+      "description": "Mobile app (Expo with Expo Router, or none)"
+    },
+    "database": {
+      "type": "string",
+      "enum": ["postgres", "mysql"],
+      "default": "postgres",
+      "description": "Database engine"
+    },
+    "packageManager": {
+      "type": "string",
+      "enum": ["pnpm", "npm"],
+      "default": "pnpm",
+      "description": "Package manager used to install dependencies"
+    },
+    "linter": {
+      "type": "string",
+      "enum": ["eslint", "biome"],
+      "default": "eslint",
+      "description": "Linter and formatter"
+    }
+  }
+}

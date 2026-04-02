@@ -1,12 +1,20 @@
 import { cancel, intro, isCancel, outro, select, spinner, text } from '@clack/prompts'
 import { resolve } from 'node:path'
+import { loadConfig } from './config.js'
 import { scaffold } from './scaffold.js'
 import type { Backend, Database, Frontend, Linter, Mobile, ORM, PackageManager, ProjectConfig } from './types.js'
 
-export async function create(fullMode = false) {
+interface CreateOptions {
+  fullMode?: boolean
+  configPath?: string
+}
+
+export async function create({ fullMode = false, configPath }: CreateOptions = {}) {
+  const cfg = configPath ? await loadConfig(configPath) : {}
+
   intro('stackcraft — spin up a production-ready monorepo')
 
-  const projectName = await text({
+  const projectName = cfg.name ?? await text({
     message: 'Project name',
     placeholder: 'my-app',
     validate: (v) => (!v ? 'Required' : undefined),
@@ -16,7 +24,7 @@ export async function create(fullMode = false) {
     process.exit(0)
   }
 
-  const backend = await select({
+  const backend = cfg.backend ?? await select({
     message: 'Backend',
     options: [
       { value: 'nestjs-rest', label: 'NestJS REST', hint: 'REST API' },
@@ -28,8 +36,11 @@ export async function create(fullMode = false) {
     process.exit(0)
   }
 
-  let orm: ORM = 'prisma'
-  if (fullMode) {
+  const ormFromConfig = cfg.orm
+  let orm: ORM
+  if (ormFromConfig) {
+    orm = ormFromConfig
+  } else if (fullMode) {
     const ormAnswer = await select({
       message: 'ORM',
       options: [
@@ -42,9 +53,11 @@ export async function create(fullMode = false) {
       process.exit(0)
     }
     orm = ormAnswer as ORM
+  } else {
+    orm = 'prisma'
   }
 
-  const frontend = await select({
+  const frontend = cfg.frontend ?? await select({
     message: 'Frontend',
     options: [
       { value: 'vite', label: 'Vite + React', hint: 'Fast dev server, great for SPAs' },
@@ -56,7 +69,7 @@ export async function create(fullMode = false) {
     process.exit(0)
   }
 
-  const mobile = await select({
+  const mobile = cfg.mobile ?? await select({
     message: 'Mobile',
     options: [
       { value: 'none', label: 'None' },
@@ -68,7 +81,7 @@ export async function create(fullMode = false) {
     process.exit(0)
   }
 
-  const database = await select({
+  const database = cfg.database ?? await select({
     message: 'Database',
     options: [
       { value: 'postgres', label: 'PostgreSQL', hint: 'recommended' },
@@ -80,7 +93,7 @@ export async function create(fullMode = false) {
     process.exit(0)
   }
 
-  const packageManager = await select({
+  const packageManager = cfg.packageManager ?? await select({
     message: 'Package manager',
     options: [
       { value: 'pnpm', label: 'pnpm', hint: 'recommended' },
@@ -92,8 +105,11 @@ export async function create(fullMode = false) {
     process.exit(0)
   }
 
-  let linter: Linter = 'eslint'
-  if (fullMode) {
+  const linterFromConfig = cfg.linter
+  let linter: Linter
+  if (linterFromConfig) {
+    linter = linterFromConfig
+  } else if (fullMode) {
     const linterAnswer = await select({
       message: 'Linter / formatter',
       options: [
@@ -106,6 +122,8 @@ export async function create(fullMode = false) {
       process.exit(0)
     }
     linter = linterAnswer as Linter
+  } else {
+    linter = 'eslint'
   }
 
   const config: ProjectConfig = {

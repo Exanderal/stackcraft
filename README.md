@@ -16,6 +16,23 @@ Add `--full` to unlock ORM and linter selection:
 npx @exanderal/stackcraft --full
 ```
 
+### Non-interactive mode
+
+Generate a config file with all defaults and possible values:
+
+```sh
+npx @exanderal/stackcraft init
+# → writes stackcraft.config.json to the current directory
+```
+
+Edit what you need, then scaffold without any prompts:
+
+```sh
+npx @exanderal/stackcraft --config stackcraft.config.json
+```
+
+The config file includes a `$schema` URL — VS Code provides autocomplete and inline validation for every field automatically. Any field omitted from the config still falls back to an interactive prompt.
+
 ## What it generates
 
 An Nx monorepo with:

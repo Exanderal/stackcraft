@@ -1,6 +1,6 @@
 {
   "name": "@exanderal/stackcraft",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Opinionated full-stack project scaffolding CLI",
   "type": "module",
   "bin": {
@@ -16,7 +16,8 @@
     "eslint",
     "tsconfig",
     "prettier",
-    "templates"
+    "templates",
+    "schema.json"
   ],
   "scripts": {
     "build": "tsc",
