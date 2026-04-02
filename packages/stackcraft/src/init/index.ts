@@ -41,5 +41,5 @@ export async function init() {
   }
 
   console.log('')
-  outro('Run: npx stackcraft --config stackcraft.config.json')
+  outro('Run: npx @exanderal/stackcraft --config stackcraft.config.json')
 }

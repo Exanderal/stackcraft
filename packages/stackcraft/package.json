@@ -1,6 +1,6 @@
 {
   "name": "@exanderal/stackcraft",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Opinionated full-stack project scaffolding CLI",
   "type": "module",
   "bin": {
