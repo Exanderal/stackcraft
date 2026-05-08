@@ -33,6 +33,17 @@ npx @exanderal/stackcraft --config stackcraft.config.json
 
 The config file includes a `$schema` URL — VS Code provides autocomplete and inline validation for every field automatically. Any field omitted from the config still falls back to an interactive prompt.
 
+### Scaffold into the current directory
+
+By default, a new subdirectory is created. To scaffold into an existing directory (e.g. a freshly cloned empty repo), use `--here`:
+
+```sh
+npx @exanderal/stackcraft --here
+npx @exanderal/stackcraft --config stackcraft.config.json --here
+```
+
+Or set `"here": true` in the config file. The `name` field still sets the monorepo package name.
+
 ## What it generates
 
 An Nx monorepo with:
@@ -46,6 +57,7 @@ An Nx monorepo with:
 - **Docker Compose** — local database with a single command (`pnpm db:start`)
 - **Per-app `.env` files** — pre-filled with local defaults, gitignored, with committed `.env.example`
 - **Local code generators** — `generate:module` (interactive), `generate:controller`, `generate:resolver`
+- **GitHub Actions** — quality gate CI (typecheck, lint, test, security audit, build) on every PR; Dependabot for weekly dependency and Actions version updates
 - **Generated `README.md`** — quick start, scripts reference, and Railway deploy instructions
 
 ## Repo structure
@@ -88,14 +100,14 @@ import { scaffold } from './packages/stackcraft/dist/create/scaffold.js'
 
 await scaffold({
   projectName: 'my-app',
-  frontend: 'vite',          // or 'nextjs'
-  backend: 'nestjs-graphql', // or 'nestjs-rest'
-  database: 'postgres',      // or 'mysql'
-  mobile: 'none',            // or 'expo'
-  linter: 'eslint',          // or 'biome'
-  orm: 'prisma',             // or 'kysely'
-  packageManager: 'pnpm',    // or 'npm'
-  targetDir: '/path/to/output',
+  frontend: 'vite',           // or 'nextjs'
+  backend: 'nestjs-graphql',  // or 'nestjs-rest'
+  database: 'postgres',       // or 'mysql'
+  mobile: 'none',             // or 'expo'
+  linter: 'eslint',           // or 'biome'
+  orm: 'prisma',              // or 'kysely'
+  packageManager: 'pnpm',     // or 'npm'
+  targetDir: '/path/to/output', // use process.cwd() to scaffold in place
 }, (msg) => console.log(msg))
 ```
 

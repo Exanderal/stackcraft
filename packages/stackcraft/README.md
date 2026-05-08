@@ -38,7 +38,8 @@ This writes `stackcraft.config.json` to the current directory:
   "mobile": "none",
   "database": "postgres",
   "packageManager": "pnpm",
-  "linter": "eslint"
+  "linter": "eslint",
+  "here": false
 }
 ```
 
@@ -49,6 +50,26 @@ npx @exanderal/stackcraft --config stackcraft.config.json
 ```
 
 Any field omitted from the config will be prompted interactively. The `$schema` enables autocomplete and validation in VS Code — hover over any field to see valid values.
+
+### Scaffold into the current directory
+
+By default, stackcraft creates a new subdirectory named after your project. If you already have a repository cloned and want to scaffold directly into it, use `--here`:
+
+```sh
+npx @exanderal/stackcraft --here
+npx @exanderal/stackcraft --config stackcraft.config.json --here
+```
+
+Or set it in the config:
+
+```json
+{
+  "name": "my-app",
+  "here": true
+}
+```
+
+`name` still sets the monorepo package name — it just no longer doubles as the output folder.
 
 ## What you get
 
@@ -62,6 +83,10 @@ your-project/
 │   └── types/            # auto-generated types shared across all apps
 ├── tools/
 │   └── generators/       # local Nx code generators
+├── .github/
+│   ├── workflows/
+│   │   └── quality.yml   # CI: typecheck, lint, test, security audit, build
+│   └── dependabot.yml    # weekly dependency and Actions version updates
 └── docker-compose.yml    # local database
 ```
 
@@ -138,6 +163,7 @@ pnpm dev            # start all apps in parallel
 pnpm build          # build all apps
 pnpm test           # run all tests
 pnpm lint           # lint all apps
+pnpm typecheck      # TypeScript type-check all apps (no emit)
 pnpm db:start       # start the local database
 pnpm db:stop        # stop the local database
 pnpm db:logs        # tail database logs
@@ -262,6 +288,9 @@ const { data, loading } = useGetTrainersQuery()
 - [x] Prisma ORM (default)
 - [x] Kysely ORM with repository abstraction (`--full`)
 - [x] `stackcraft init` + `--config` for non-interactive use
+- [x] `--here` flag to scaffold into the current directory
+- [x] GitHub Actions quality gate pre-configured (typecheck, lint, test, security audit, build)
+- [x] Dependabot pre-configured for weekly dependency and Actions version updates
 - [ ] `stackcraft add` addon system (auth, Supabase, etc.)
 
 ## License
