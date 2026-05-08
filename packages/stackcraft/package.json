@@ -1,6 +1,6 @@
 {
   "name": "@exanderal/stackcraft",
-  "version": "0.6.2",
+  "version": "0.7.0",
   "description": "Opinionated full-stack project scaffolding CLI",
   "type": "module",
   "bin": {
@@ -33,7 +33,7 @@
   "devDependencies": {
     "@types/node": "^22.0.0",
     "typescript": "^5.7.0",
-    "vitest": "^3.0.0"
+    "vitest": "^4.0.0"
   },
   "keywords": [
     "cli",
