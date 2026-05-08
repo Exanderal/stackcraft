@@ -7,9 +7,10 @@ import type { Backend, Database, Frontend, Linter, Mobile, ORM, PackageManager, 
 interface CreateOptions {
   fullMode?: boolean
   configPath?: string
+  here?: boolean
 }
 
-export async function create({ fullMode = false, configPath }: CreateOptions = {}) {
+export async function create({ fullMode = false, configPath, here: hereFlag = false }: CreateOptions = {}) {
   const cfg = configPath ? await loadConfig(configPath) : {}
 
   intro('stackcraft — spin up a production-ready monorepo')
@@ -126,6 +127,8 @@ export async function create({ fullMode = false, configPath }: CreateOptions = {
     linter = 'eslint'
   }
 
+  const here = hereFlag || cfg.here || false
+
   const config: ProjectConfig = {
     projectName: projectName as string,
     frontend: frontend as Frontend,
@@ -135,7 +138,7 @@ export async function create({ fullMode = false, configPath }: CreateOptions = {
     linter,
     orm,
     packageManager: packageManager as PackageManager,
-    targetDir: resolve(process.cwd(), projectName as string),
+    targetDir: here ? resolve(process.cwd()) : resolve(process.cwd(), projectName as string),
   }
 
   const s = spinner()
@@ -143,5 +146,5 @@ export async function create({ fullMode = false, configPath }: CreateOptions = {
   await scaffold(config, (msg) => s.message(msg))
   s.stop('Done!')
 
-  outro(`cd ${config.projectName} && ${config.packageManager} dev`)
+  outro(here ? `${config.packageManager} dev` : `cd ${config.projectName} && ${config.packageManager} dev`)
 }

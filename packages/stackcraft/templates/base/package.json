@@ -10,6 +10,7 @@
     "generate:module": "nx g @local/generators:module",
     "generate:resolver": "nx g @local/generators:resolver",
     "generate:controller": "nx g @local/generators:controller",
+    "typecheck": "nx run-many -t typecheck",
     "codegen": "nx run types:codegen",
     "codegen:watch": "nx run types:codegen:watch"
   },

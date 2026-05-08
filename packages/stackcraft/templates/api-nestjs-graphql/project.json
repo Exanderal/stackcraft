@@ -16,6 +16,10 @@
     "test": {
       "executor": "nx:run-commands",
       "options": { "command": "pnpm run test", "cwd": "{projectRoot}" }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": { "command": "pnpm run typecheck", "cwd": "{projectRoot}" }
     }
   }
 }

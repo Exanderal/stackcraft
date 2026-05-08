@@ -14,6 +14,7 @@ const DEFAULT_CONFIG = {
   database: 'postgres',
   packageManager: 'pnpm',
   linter: 'eslint',
+  here: false,
 }
 
 const OPTIONS: Array<{ field: string; values: string[] }> = [
@@ -24,6 +25,7 @@ const OPTIONS: Array<{ field: string; values: string[] }> = [
   { field: 'database', values: ['postgres', 'mysql'] },
   { field: 'packageManager', values: ['pnpm', 'npm'] },
   { field: 'linter', values: ['eslint', 'biome'] },
+  { field: 'here', values: ['true', 'false'] },
 ]
 
 export async function init() {

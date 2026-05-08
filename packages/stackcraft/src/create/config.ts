@@ -11,6 +11,7 @@ export interface ConfigFile {
   database?: Database
   packageManager?: PackageManager
   linter?: Linter
+  here?: boolean
 }
 
 const VALID: Record<keyof ConfigFile, readonly string[]> = {
@@ -22,6 +23,7 @@ const VALID: Record<keyof ConfigFile, readonly string[]> = {
   database: ['postgres', 'mysql'],
   packageManager: ['pnpm', 'npm'],
   linter: ['eslint', 'biome'],
+  here: [],
 }
 
 export async function loadConfig(configPath: string): Promise<ConfigFile> {
@@ -49,6 +51,12 @@ export async function loadConfig(configPath: string): Promise<ConfigFile> {
     if (key === 'name') {
       if (typeof value !== 'string' || !value.trim()) {
         errors.push(`"name" must be a non-empty string`)
+      }
+      continue
+    }
+    if (key === 'here') {
+      if (typeof value !== 'boolean') {
+        errors.push(`"here" must be a boolean`)
       }
       continue
     }
