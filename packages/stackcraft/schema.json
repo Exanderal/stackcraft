@@ -12,7 +12,7 @@
     },
     "name": {
       "type": "string",
-      "description": "Project name (used as the root directory name)"
+      "description": "Project name (used as the monorepo package name)"
     },
     "backend": {
       "type": "string",
@@ -55,6 +55,11 @@
       "enum": ["eslint", "biome"],
       "default": "eslint",
       "description": "Linter and formatter"
+    },
+    "here": {
+      "type": "boolean",
+      "default": false,
+      "description": "Scaffold into the current directory instead of creating a new subdirectory"
     }
   }
 }
