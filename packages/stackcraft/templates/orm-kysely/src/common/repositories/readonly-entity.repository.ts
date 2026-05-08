@@ -1,4 +1,4 @@
-import { Kysely } from 'kysely';
+import type { Kysely, Selectable } from 'kysely';
 import type { Database } from '../../database/database.types';
 
 export function where(column: string) {
@@ -6,41 +6,41 @@ export function where(column: string) {
 }
 
 export abstract class ReadonlyEntityRepository<
-  TEntity,
+  TableName extends keyof Database & string,
+  TEntity = Selectable<Database[TableName]>,
   TFilters extends Record<string, unknown> = Record<string, never>,
 > {
   constructor(protected readonly db: Kysely<Database>) {}
 
-  protected abstract table: string;
+  protected abstract table: TableName;
 
-  protected filters: Partial<
-    Record<keyof TFilters, (qb: any, value: any) => any>
-  > = {};
+  protected filters: Partial<Record<keyof TFilters, (qb: any, value: unknown) => any>> = {};
 
   protected queryable() {
-    return this.db.selectFrom(this.table as any);
+    return this.db.selectFrom(this.table);
   }
 
   async findAll(filters?: Partial<TFilters>): Promise<TEntity[]> {
     let q = this.queryable();
     if (filters) {
       for (const [key, value] of Object.entries(filters)) {
-        const fn = (this.filters as any)[key];
+        const fn = this.filters[key as keyof TFilters];
         if (value !== undefined && fn) q = fn(q, value);
       }
     }
-    return (await q.selectAll().execute()).map((r) => this.mapFromDB(r as any));
+    return (await q.selectAll().execute()) as TEntity[];
   }
 
   async findById(id: string | number): Promise<TEntity | null> {
     const row = await this.queryable()
       .selectAll()
-      .where(`${this.table}.id` as any, '=', id)
+      // biome-ignore lint/suspicious/noExplicitAny: column 'id' cannot be inferred from a generic TableName without schema knowledge
+      .where('id' as any, '=', id)
       .executeTakeFirst();
-    return row ? this.mapFromDB(row as any) : null;
+    return row ? (row as TEntity) : null;
   }
 
-  protected mapFromDB(row: any): TEntity {
-    return row;
+  protected mapFromDB(row: Selectable<Database[TableName]>): TEntity {
+    return row as TEntity;
   }
 }

@@ -1,15 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { EntityRepository } from '../../common/repositories/entity.repository';
 import { KyselyService } from '../../modules/database/kysely.service';
-import type { <%= className %> } from './<%= fileName %>.model';
 
 // Add properties to enable filtering, e.g.:
 // export type <%= className %>Filters = { id?: string }
 export type <%= className %>Filters = Record<string, never>
 
 @Injectable()
-export class <%= className %>Repository extends EntityRepository<<%= className %>, <%= className %>Filters> {
-  protected table = '<%= fileName %>s';
+export class <%= className %>Repository extends EntityRepository<'<%= fileName %>s', <%= className %>Filters> {
+  protected table = '<%= fileName %>s' as const;
 
   constructor(kyselyService: KyselyService) {
     super(kyselyService.db);

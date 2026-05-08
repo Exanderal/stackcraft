@@ -31,13 +31,19 @@ async function writeBiomeConfig(config: ProjectConfig) {
   const biome = {
     $schema: 'https://biomejs.dev/schemas/1.9.0/schema.json',
     vcs: { enabled: true, clientKind: 'git', useIgnoreFile: true },
-    files: { ignoreUnknown: false },
+    files: { ignoreUnknown: false, ignore: ['package.json'] },
     formatter: { enabled: true, indentStyle: 'space', indentWidth: 2 },
-    linter: { enabled: true, rules: { recommended: true } },
+    linter: { enabled: true, rules: { recommended: true, style: { useImportType: 'off' } } },
     javascript: {
       formatter: { quoteStyle: 'single', trailingCommas: 'all', semicolons: 'always' },
     },
     organizeImports: { enabled: true },
+    overrides: [
+      {
+        include: ['tsconfig*.json'],
+        json: { parser: { allowComments: true, allowTrailingCommas: true } },
+      },
+    ],
   }
   await writeFile(
     join(config.targetDir, 'biome.json'),

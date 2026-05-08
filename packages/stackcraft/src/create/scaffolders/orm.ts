@@ -81,7 +81,7 @@ export async function injectOrmDeps(appDir: string, config: ProjectConfig) {
     pkg.prisma = { seed: 'tsx prisma/seeds/seed.ts' }
   } else {
     // kysely
-    pkg.dependencies['kysely'] = '^0.27.0'
+    pkg.dependencies['kysely'] = '^0.28.14'
     pkg.devDependencies['tsx'] = '^4.0.0'
 
     if (config.database === 'postgres') {
@@ -177,20 +177,21 @@ export async function writeMigrateScript(appDir: string, config: ProjectConfig) 
 
   if (config.database === 'postgres') {
     content = `import 'dotenv/config';
-import { Kysely, PostgresDialect, Migrator, FileMigrationProvider } from 'kysely';
-import { Pool } from 'pg';
 import { promises as fs } from 'node:fs';
-import { join, dirname } from 'node:path';
+import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { FileMigrationProvider, Kysely, Migrator, PostgresDialect } from 'kysely';
+import { Pool } from 'pg';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 async function migrate() {
+  // biome-ignore lint/suspicious/noExplicitAny: migration script uses dynamic DB types
   const db = new Kysely<any>({
     dialect: new PostgresDialect({
       pool: new Pool({
         host: process.env.DB_HOST,
-        port: parseInt(process.env.DB_PORT ?? '5432', 10),
+        port: Number.parseInt(process.env.DB_PORT ?? '5432', 10),
         user: process.env.DB_USER,
         password: process.env.DB_PASSWORD,
         database: process.env.DB_NAME,
@@ -212,10 +213,10 @@ async function migrate() {
     ? await migrator.migrateDown()
     : await migrator.migrateToLatest();
 
-  results?.forEach((it) => {
+  for (const it of results ?? []) {
     if (it.status === 'Success') console.log(\`✓ \${it.migrationName}\`);
     else if (it.status === 'Error') console.error(\`✗ \${it.migrationName}\`);
-  });
+  }
 
   if (error) {
     console.error('Migration failed:', error);
@@ -229,20 +230,21 @@ migrate();
 `
   } else {
     content = `import 'dotenv/config';
-import { Kysely, MysqlDialect, Migrator, FileMigrationProvider } from 'kysely';
-import { createPool } from 'mysql2/promise';
 import { promises as fs } from 'node:fs';
-import { join, dirname } from 'node:path';
+import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { FileMigrationProvider, Kysely, Migrator, MysqlDialect } from 'kysely';
+import { createPool } from 'mysql2/promise';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 async function migrate() {
+  // biome-ignore lint/suspicious/noExplicitAny: migration script uses dynamic DB types
   const db = new Kysely<any>({
     dialect: new MysqlDialect({
       pool: createPool({
         host: process.env.DB_HOST,
-        port: parseInt(process.env.DB_PORT ?? '3306', 10),
+        port: Number.parseInt(process.env.DB_PORT ?? '3306', 10),
         user: process.env.DB_USER,
         password: process.env.DB_PASSWORD,
         database: process.env.DB_NAME,
@@ -264,10 +266,10 @@ async function migrate() {
     ? await migrator.migrateDown()
     : await migrator.migrateToLatest();
 
-  results?.forEach((it) => {
+  for (const it of results ?? []) {
     if (it.status === 'Success') console.log(\`✓ \${it.migrationName}\`);
     else if (it.status === 'Error') console.error(\`✗ \${it.migrationName}\`);
-  });
+  }
 
   if (error) {
     console.error('Migration failed:', error);
