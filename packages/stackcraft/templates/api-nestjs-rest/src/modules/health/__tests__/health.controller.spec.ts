@@ -6,12 +6,12 @@ describe('HealthController', () => {
   let controller: HealthController;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    const moduleRef: TestingModule = await Test.createTestingModule({
       controllers: [HealthController],
       providers: [HealthService],
     }).compile();
 
-    controller = module.get<HealthController>(HealthController);
+    controller = moduleRef.get<HealthController>(HealthController);
   });
 
   it('returns ok status', () => {

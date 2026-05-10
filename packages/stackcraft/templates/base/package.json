@@ -12,10 +12,19 @@
     "generate:controller": "nx g @local/generators:controller",
     "typecheck": "nx run-many -t typecheck",
     "codegen": "nx run types:codegen",
-    "codegen:watch": "nx run types:codegen:watch"
+    "codegen:watch": "nx run types:codegen:watch",
+    "prepare": "husky"
   },
   "devDependencies": {
     "@nx/devkit": "^22.0.0",
-    "nx": "^22.0.0"
+    "@secretlint/secretlint-rule-preset-recommend": "^8.0.0",
+    "husky": "^9.0.0",
+    "lint-staged": "^15.0.0",
+    "nx": "^22.0.0",
+    "secretlint": "^8.0.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx,css,md,json}": "prettier --write",
+    "**/*": "secretlint"
   }
 }

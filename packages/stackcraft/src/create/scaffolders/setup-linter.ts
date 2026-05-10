@@ -16,7 +16,7 @@ export async function setupLinter(config: ProjectConfig) {
   }
 
   if (config.mobile === 'expo') {
-    await stripApp(config, 'mobile', [], [], EXPO_SCRIPT_OVERRIDES)
+    await stripApp(config, 'mobile', EXPO_ESLINT_DEPS, EXPO_FILES, EXPO_SCRIPT_OVERRIDES)
   }
 }
 
@@ -24,6 +24,10 @@ async function addBiomeToRoot(config: ProjectConfig) {
   const pkgPath = join(config.targetDir, 'package.json')
   const pkg = JSON.parse(await readFile(pkgPath, 'utf-8'))
   pkg.devDependencies['@biomejs/biome'] = '^1.9.0'
+  pkg['lint-staged'] = {
+    '*.{ts,tsx,js,jsx,css,json}': 'biome format --write',
+    '**/*': 'secretlint',
+  }
   await writeFile(pkgPath, JSON.stringify(pkg, null, 2) + '\n', 'utf-8')
 }
 
@@ -121,6 +125,10 @@ const NEXTJS_ESLINT_DEPS: string[] = []
 const NEXTJS_SCRIPT_OVERRIDES: Record<string, string | null> = {
   lint: 'biome check .',
 }
+
+const EXPO_ESLINT_DEPS = ['@eslint/eslintrc', 'eslint', 'eslint-config-expo']
+
+const EXPO_FILES = ['eslint.config.mjs']
 
 const EXPO_SCRIPT_OVERRIDES: Record<string, string | null> = {
   lint: 'biome check .',

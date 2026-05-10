@@ -8,6 +8,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "build": "expo export",
+    "lint": "eslint .",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -32,6 +33,9 @@
   },
   "devDependencies": {
     "@types/react": "~19.1.0",
+    "@eslint/eslintrc": "^3.0.0",
+    "eslint": "^9.9.0",
+    "eslint-config-expo": "~9.2.0",
     "typescript": "~5.9.2"
   },
   "private": true

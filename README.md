@@ -58,6 +58,7 @@ An Nx monorepo with:
 - **Per-app `.env` files** — pre-filled with local defaults, gitignored, with committed `.env.example`
 - **Local code generators** — `generate:module` (interactive), `generate:controller`, `generate:resolver`
 - **GitHub Actions** — quality gate CI (typecheck, lint, test, security audit, build) on every PR; Dependabot for weekly dependency and Actions version updates
+- **Pre-commit hooks** — husky + lint-staged auto-formats staged files on commit; secretlint blocks accidentally committed secrets (API keys, tokens, credentials)
 - **Generated `README.md`** — quick start, scripts reference, and Railway deploy instructions
 
 ## Repo structure

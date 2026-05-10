@@ -1,4 +1,3 @@
-import React from "react";
 import { useTemplateComponent } from "./TemplateComponent.behaviour";
 
 export const TemplateComponent = () => {
