@@ -90,6 +90,8 @@ your-project/
 │   ├── workflows/
 │   │   └── quality.yml   # CI: typecheck, lint, test, security audit, build
 │   └── dependabot.yml    # weekly dependency and Actions version updates
+├── .husky/
+│   └── pre-commit        # auto-format staged files + secret scan before every commit
 └── docker-compose.yml    # local database
 ```
 
@@ -272,6 +274,7 @@ const { data, loading } = useGetTrainersQuery()
 | Mobile | Expo + Expo Router |
 | Styles | Tailwind CSS v4 |
 | Linter / formatter | ESLint + Prettier or Biome (`--full`) |
+| Pre-commit | husky + lint-staged + secretlint |
 | GraphQL client | Apollo Client |
 | REST types | @hey-api/openapi-ts |
 | GraphQL types + hooks | @graphql-codegen/cli |
@@ -296,6 +299,7 @@ const { data, loading } = useGetTrainersQuery()
 - [x] `--here` flag to scaffold into the current directory
 - [x] GitHub Actions quality gate pre-configured (typecheck, lint, test, security audit, build)
 - [x] Dependabot pre-configured for weekly dependency and Actions version updates
+- [x] Pre-commit hooks — auto-format staged files (Biome or Prettier) + secretlint secret scanning
 - [x] `CLAUDE.md` per app — coding guidelines for AI agents baked in at scaffold time
 - [ ] `stackcraft add` addon system (auth, Supabase, etc.)
 
