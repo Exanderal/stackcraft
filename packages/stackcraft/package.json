@@ -1,6 +1,6 @@
 {
   "name": "@exanderal/stackcraft",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "Opinionated full-stack project scaffolding CLI",
   "type": "module",
   "bin": {
@@ -24,7 +24,9 @@
     "dev": "tsc --watch",
     "lint": "tsc --noEmit",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "e2e": "node scripts/e2e.mjs",
+    "e2e:variants": "node scripts/e2e-variants.mjs"
   },
   "dependencies": {
     "@clack/prompts": "^1.2.0",

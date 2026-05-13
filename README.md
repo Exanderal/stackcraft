@@ -113,12 +113,17 @@ await scaffold({
 }, (msg) => console.log(msg))
 ```
 
-Run the e2e test (requires a built dist):
+Run the e2e tests (requires a built dist):
 
 ```sh
 cd packages/stackcraft
 pnpm build
-node scripts/e2e.mjs
+
+# default config only (fast)
+pnpm e2e
+
+# all scaffold variants — graphql, biome, kysely, nextjs, expo (slower, run before releasing)
+pnpm e2e:variants
 ```
 
 Templates are static files — generate a base with the relevant CLI tool, clean it up, and commit. The scaffolder copies files and substitutes `{{projectName}}` and `{{dbProvider}}` at scaffold time. The `.prisma` extension is treated as a text file so template vars are substituted correctly.
