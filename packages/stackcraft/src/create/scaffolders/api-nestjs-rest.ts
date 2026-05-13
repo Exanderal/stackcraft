@@ -2,7 +2,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import type { ProjectConfig } from '../types.js'
-import { injectOrmDeps, writeKyselyService, writeMigrateScript, writeModuleGeneratorIndex } from './orm.js'
+import { injectOrmDeps, writeBEClaudeMd, writeKyselyService, writeMigrateScript, writeModuleGeneratorIndex } from './orm.js'
 import { copyTemplate } from './utils/copy.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -38,6 +38,7 @@ export async function scaffoldNestjsRest(config: ProjectConfig) {
   }
 
   await writeModuleGeneratorIndex(config.targetDir, config.backend)
+  await writeBEClaudeMd(appDir, config)
   await setupRestCodegen(config.targetDir)
 }
 

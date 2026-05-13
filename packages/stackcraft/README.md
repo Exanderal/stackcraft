@@ -77,8 +77,11 @@ Or set it in the config:
 your-project/
 ├── apps/
 │   ├── backend/          # NestJS REST or GraphQL API
+│   │   └── CLAUDE.md     # coding guidelines for this app (backend + ORM specific)
 │   ├── web/              # Vite + React or Next.js
+│   │   └── CLAUDE.md     # coding guidelines for this app
 │   └── mobile/           # Expo (optional)
+│       └── CLAUDE.md     # coding guidelines for this app
 ├── packages/
 │   └── types/            # auto-generated types shared across all apps
 ├── tools/
@@ -107,6 +110,7 @@ src/
 - REST: Swagger UI at `/api`, spec written to `swagger.json` on startup
 - GraphQL: schema auto-generated to `schema.gql` on startup (code-first)
 - `.env` pre-configured with local database credentials
+- `CLAUDE.md` with layer responsibilities, generator usage, Swagger/schema rules, and ORM-specific migration workflows
 
 #### Prisma (default)
 
@@ -131,6 +135,7 @@ src/
 - TypeScript
 - GraphQL projects: Apollo Client pre-configured, `ApolloProvider` already wired at the app root
 - `.env` pre-configured with `VITE_API_URL` / `NEXT_PUBLIC_API_URL`
+- `CLAUDE.md` with component structure conventions, folder organisation rules, services layer boundary, and the 3-usage promotion threshold
 
 ### Mobile (`apps/mobile`) — optional
 
@@ -291,6 +296,7 @@ const { data, loading } = useGetTrainersQuery()
 - [x] `--here` flag to scaffold into the current directory
 - [x] GitHub Actions quality gate pre-configured (typecheck, lint, test, security audit, build)
 - [x] Dependabot pre-configured for weekly dependency and Actions version updates
+- [x] `CLAUDE.md` per app — coding guidelines for AI agents baked in at scaffold time
 - [ ] `stackcraft add` addon system (auth, Supabase, etc.)
 
 ## License

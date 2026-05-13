@@ -59,6 +59,7 @@ An Nx monorepo with:
 - **Local code generators** — `generate:module` (interactive), `generate:controller`, `generate:resolver`
 - **GitHub Actions** — quality gate CI (typecheck, lint, test, security audit, build) on every PR; Dependabot for weekly dependency and Actions version updates
 - **Generated `README.md`** — quick start, scripts reference, and Railway deploy instructions
+- **`CLAUDE.md` per app** — coding guidelines baked in at scaffold time; covers component structure, folder conventions, and layer responsibilities for frontend apps, assembled from the chosen backend and ORM for the backend
 
 ## Repo structure
 
