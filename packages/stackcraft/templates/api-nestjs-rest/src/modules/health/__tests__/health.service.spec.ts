@@ -5,11 +5,11 @@ describe('HealthService', () => {
   let service: HealthService;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    const moduleRef: TestingModule = await Test.createTestingModule({
       providers: [HealthService],
     }).compile();
 
-    service = module.get<HealthService>(HealthService);
+    service = moduleRef.get<HealthService>(HealthService);
   });
 
   it('returns ok status', () => {
